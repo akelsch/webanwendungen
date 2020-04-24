@@ -9,8 +9,19 @@
 </head>
 
 <body>
+  <h1>Corona-Verbreitung</h1>
+  <h2>Fälle pro 100.000 Einwohner</h2>
+  <form>
+    <label for="state">Wählen Sie ein Bundesland aus.</label>
+    <select id="state" name="state">
+      <option value="alle">alle</option>
+    </select>
+  </form>
+  <svg id="bar-chart" width="1000" viewBox="0 0 100 100">
+  </svg>
 
   <script type="module" src="map.js"></script>
+  <script type="module" src="bc.js"></script>
 </body>
 
 </html>

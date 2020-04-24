@@ -1,0 +1,23 @@
+body {
+  width: 1200px;
+  background-color: white;
+  font-family: sans-serif;
+  font-size: 20px;
+  margin: 50px;
+}
+
+option, select {
+  font-family: sans-serif;
+  font-size: 20px;
+}
+
+.bar {
+  stroke: black;
+  stroke-width: 0.1;
+}
+
+.text {
+  font-size: 2px;
+  font-family: sans-serif;
+  fill: black;
+}
