@@ -19,8 +19,8 @@ function renderCounties () {
       pathData += 'Z'
 
       const path = createSVGElement('path', {
-        fill: 'white',
-        stroke: 'blue',
+        fill: 'none', // TODO hsl
+        stroke: 'black',
         'stroke-width': 0.1,
         d: pathData
       })
