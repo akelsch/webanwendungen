@@ -15,7 +15,6 @@ function renderCounties() {
     rings.forEach(ring => {
       let pathData = 'M '
       ring.forEach(([x, y]) => {
-        // TODO magic numbers programmatisch bestimmen
         pathData += `${normalize(x, minMaxInformation.minX, minMaxInformation.maxX) * 100},${normalize(y, minMaxInformation.minY, minMaxInformation.maxY) * 100} `
       })
       pathData += 'Z'
@@ -31,5 +30,4 @@ function renderCounties() {
   }
 }
 
-console.log(countyGeometryMapping.values())
 renderCounties()
