@@ -25,6 +25,7 @@ function renderCounties () {
         stroke: 'pink',
         d: pathData
       })
+      path.setAttribute('stroke-width',0.1)
       svg.appendChild(path)
     })
   }
