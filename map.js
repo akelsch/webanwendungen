@@ -21,11 +21,11 @@ function renderCounties () {
       pathData += 'Z'
 
       const path = createSVGElement('path', {
-        fill: 'red',
-        stroke: 'pink',
-        d: pathData
+        fill: 'white',
+        stroke: 'blue',
+        d: pathData,
+        'stroke-width': 0.1
       })
-      path.setAttribute('stroke-width',0.1)
       svg.appendChild(path)
     })
   }
