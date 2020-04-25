@@ -44,7 +44,7 @@ function renderCasesText (y, cases) {
   const text = createSVGElement('text', {
     x: 9,
     y: y,
-    class: 'text',
+    class: 'bar-text',
     'text-anchor': 'end'
   })
   text.textContent = cases.toFixed(1)
@@ -55,7 +55,7 @@ function renderCountyText (y, county, state) {
   const text = createSVGElement('text', {
     x: 11,
     y: y,
-    class: 'text',
+    class: 'bar-text',
     'text-anchor': 'start'
   })
   text.textContent = `${county} (${state})`
