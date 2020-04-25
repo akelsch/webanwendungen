@@ -1,8 +1,8 @@
 import { mapData } from './map-data.js'
-<<<<<<< HEAD
-import {createSVGElement} from './common.js'
+import { createSVGElement, normalize } from './common.js'
 const countyByRings = new Map()
-const svg = document.querySelector('#bar-chart')
+const svg = document.querySelector('#map')
+console.log(svg)
 
 
 const fillMap = () => {
@@ -13,37 +13,41 @@ const fillMap = () => {
 
 fillMap()
 
+function minMax(value, XY) {
+  let min, max = 0;
+  //The values for Germany    
+  if (XY === "X") {
+    min = 5.8;
+    max = 15.1;
+  }
+  else if (XY === "Y") {
+    min = 47.2;
+    max = 55.1;
+  }
+  return ((value - min) / (max - min));
+}
+
+
 const createCountyOutline = () => {
   let attr = 'M '
-  let values = countyByRings.get('SK Flensburg')
-  values[0].forEach(([x,y]) => attr+= `${x},${y} L `)
-  attr+='Z'
-  const path = createSVGElement('path',{d:attr ,stroke : 'pink' })
-  svg.appendChild(path)
+
+  for (let [key, value] of countyByRings) {
+    value.forEach(v => {
+      v.forEach(point => {
+        attr += `${minMax(point[0],'X') * 100},${minMax(point[1],'Y') * 100} L`
+      })
+      attr += 'Z'
+      const path = createSVGElement('path', { d: attr, stroke: 'pink', fill: 'red' })
+      svg.appendChild(path)
+      attr = 'M '
+    })
+  }
+  //let values = countyByRings.get('SK Flensburg')
+  //values.forEach(point => attr+= `${point[0]},${point[1]} L `)
+  //attr+='Z'
+  //const path = createSVGElement('path',{d:attr ,stroke : 'pink' })
+  //svg.appendChild(path)
 }
+
 createCountyOutline()
-=======
-import { createSVGElement } from './common.js'
 
-const map = document.getElementById('map')
-
-const coordinates = mapData.features.map(elem => elem.geometry.rings)
-
-// Funktioniert noch nicht :(
-let pathCommands = 'M '
-
-// Erster Kreis und davon der erste Ring (SK Flensburg)
-coordinates[0][0].forEach(([x, y]) => {
-  pathCommands += `${x},${y} `
-})
-
-pathCommands += 'Z'
-
-const path = createSVGElement('path', {
-  stroke: 'black',
-  'stroke-width': 0.01,
-  d: pathCommands
-})
-
-map.appendChild(path)
->>>>>>> 93af41befe91d90063da3559330f58b58b5a0e04
