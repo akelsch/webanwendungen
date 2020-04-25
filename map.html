@@ -10,15 +10,26 @@
 
 <body>
   <h1>Corona-Verbreitung</h1>
-  <h2>Fälle pro 100.000 Einwohner</h2>
-  <form>
-    <label for="state">Wählen Sie ein Bundesland aus.</label>
-    <select id="state" name="state">
-      <option value="alle">alle</option>
-    </select>
-  </form>
-  <svg id="bar-chart" width="1000" viewBox="0 0 100 100">
-  </svg>
+
+  <div class="wrapper">
+    <section class="left">
+      <h2>Karte</h2>
+      <svg id="map" width="1000px" viewBox="0 0 100 100">
+      </svg>
+    </section>
+
+    <section>
+      <h2>Fälle pro 100.000 Einwohner</h2>
+      <form>
+        <label for="state">Wählen Sie ein Bundesland aus.</label>
+        <select id="state" name="state">
+          <option value="alle">alle</option>
+        </select>
+      </form>
+      <svg id="bar-chart" width="1000px" viewBox="0 0 100 100">
+      </svg>
+    </section>
+  </div>
 
   <script type="module" src="map.js"></script>
 </body>

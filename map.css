@@ -1,14 +1,26 @@
 body {
-  width: 1200px;
-  background-color: white;
   font-family: sans-serif;
   font-size: 20px;
   margin: 50px;
 }
 
-option, select {
-  font-family: sans-serif;
+select {
   font-size: 20px;
+}
+
+/* Damit man den Umriss vom SVG erkennen kann */
+svg {
+  border: 1px solid black;
+}
+
+.wrapper {
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.left {
+  float: left;
+  margin-right: 20px;
 }
 
 .bar {
@@ -16,8 +28,6 @@ option, select {
   stroke-width: 0.1;
 }
 
-.text {
+.bar-text {
   font-size: 2px;
-  font-family: sans-serif;
-  fill: black;
 }
