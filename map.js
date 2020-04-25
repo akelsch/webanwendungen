@@ -1,24 +1,32 @@
 import { mapData } from './map-data.js'
-import { createSVGElement } from './common.js'
+import { createSVGElement, normalize } from './common.js'
 
-const map = document.getElementById('map')
+const svg = document.querySelector('#map')
 
-const coordinates = mapData.features.map(elem => elem.geometry.rings)
-
-// slice -> nur erster Kreis
-coordinates.slice(0, 1).forEach(county => {
-  let pathData = 'M '
-  // nur erster ring
-  county[0].forEach(([x, y]) => {
-    pathData += `${Math.trunc(x * 1000)},${Math.trunc(y * 1000)} `
-  })
-  pathData += 'Z'
-
-  const path = createSVGElement('path', {
-    fill: 'none',
-    stroke: 'black',
-    'stroke-width': 0.1,
-    d: pathData
-  })
-  map.appendChild(path)
+const countyGeometryMapping = new Map()
+mapData.features.forEach(element => {
+  countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
 })
+
+function renderCounties () {
+  for (const rings of countyGeometryMapping.values()) {
+    rings.forEach(ring => {
+      let pathData = 'M '
+      ring.forEach(([x, y]) => {
+        // TODO magic numbers programmatisch bestimmen
+        pathData += `${normalize(x, 5.8, 15.1) * 100},${normalize(y, 47.2, 55.1) * 100} `
+      })
+      pathData += 'Z'
+
+      const path = createSVGElement('path', {
+        fill: 'none', // TODO hsl
+        stroke: 'black',
+        'stroke-width': 0.1,
+        d: pathData
+      })
+      svg.appendChild(path)
+    })
+  }
+}
+
+renderCounties()

@@ -17,7 +17,7 @@ Der Benutzer kann wählen, ob die Anzahl der Fälle, die die Farbe bestimmt, die
 
 Bewegt die Benutzerin die Maus über einen Kreis, so soll dessen Name als Tooltip angezeigt werden. Klickt sie auf einen Kreis, so soll bei der Klickposition ein Popup-Fenster angezeigt werden. Verlässt die Maus den Kreis, so verschwindet dieses Popup-Fenster.
 
-Der Benutzer kann die Karte skalieren, d.h einzoomen und auszoomen. Zu Beginn ist die Karte so skaliert, dass Deutschland vollständig sichtbar ist und dadurch der zur Verfügung stehende Platz möglichst ausgeschöpft ist.
+Die Karte ist so skaliert, dass Deutschland vollständig sichtbar ist und dadurch der zur Verfügung stehende Platz möglichst ausgeschöpft ist.
 
 Demonstrieren Sie die Änderung aller Optionen, indem Sie dem Benutzer eine Auswahlmöglichkeit geben, mit dem er entweder die Standardoptionen wählen kann oder einen festen Satz von Alternativoptionen. Für diese Aufgabe ist es nicht erforderlich, dass der Benutzer die Optionen selbst bestimmen kann.
 
@@ -28,7 +28,7 @@ Demonstrieren Sie die Änderung aller Optionen, indem Sie dem Benutzer eine Ausw
 * Füllfarbe mit hsl
   * Sättigung (Saturation) auf 100%
   * Basisfarbe (Hue) als Option, default blau = 240
-  * Helligkeit (Lightness) hängt von der Anzahl der Corona-Infizierten pro 100.000 Einwohner ab (0 = 100%, Deutschland-weit maximal = 50%)
+  * Helligkeit (Lightness) hängt von der Anzahl der Corona-Infizierten pro 100.000 Einwohner ab (0 = 100%, Deutschland-weit maximal = 50%), dazwischen wird linear interpoliert
 * Gewählter Kreis wird hervorgehoben (gleichzeitig mit Beginn der Animation des jeweiligen Balkens)
   * Umriss als Option, default rot
   * Dicke als Option, default ?
