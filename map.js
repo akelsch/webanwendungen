@@ -1,5 +1,5 @@
 import { mapData } from './map-data.js'
-import { createSVGElement, normalize } from './common.js'
+import { createSVGElement, normalize, findMinMaxForXandYCoordinationPoints } from './common.js'
 
 const svg = document.querySelector('#map')
 
@@ -8,13 +8,15 @@ mapData.features.forEach(element => {
   countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
 })
 
-function renderCounties () {
+
+function renderCounties() {
+  const minMaxInformation = findMinMaxForXandYCoordinationPoints(countyGeometryMapping)
   for (const rings of countyGeometryMapping.values()) {
     rings.forEach(ring => {
       let pathData = 'M '
       ring.forEach(([x, y]) => {
         // TODO magic numbers programmatisch bestimmen
-        pathData += `${normalize(x, 5.8, 15.1) * 100},${normalize(y, 47.2, 55.1) * 100} `
+        pathData += `${normalize(x, minMaxInformation.minX, minMaxInformation.maxX) * 100},${normalize(y, minMaxInformation.minY, minMaxInformation.maxY) * 100} `
       })
       pathData += 'Z'
 
@@ -29,4 +31,5 @@ function renderCounties () {
   }
 }
 
+console.log(countyGeometryMapping.values())
 renderCounties()
