@@ -4,45 +4,29 @@ import { createSVGElement, normalize } from './common.js'
 const svg = document.querySelector('#map')
 
 const countyGeometryMapping = new Map()
-
-function initalizeMapping () {
-  mapData.features.forEach(element => {
-    countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
-  })
-}
+mapData.features.forEach(element => {
+  countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
+})
 
 function renderCounties () {
-  for (const [_, rings] of countyGeometryMapping) {
+  for (const rings of countyGeometryMapping.values()) {
     rings.forEach(ring => {
       let pathData = 'M '
       ring.forEach(([x, y]) => {
-        pathData += `${minMax(x, 'X') * 100},${minMax(y, 'Y') * 100} `
+        // TODO magic numbers programmatisch bestimmen
+        pathData += `${normalize(x, 5.8, 15.1) * 100},${normalize(y, 47.2, 55.1) * 100} `
       })
       pathData += 'Z'
 
       const path = createSVGElement('path', {
         fill: 'white',
         stroke: 'blue',
-        d: pathData,
-        'stroke-width': 0.1
+        'stroke-width': 0.1,
+        d: pathData
       })
       svg.appendChild(path)
     })
   }
 }
 
-function minMax (value, XY) {
-  let min; let max = 0
-  // The values for Germany
-  if (XY === 'X') {
-    min = 5.8
-    max = 15.1
-  } else if (XY === 'Y') {
-    min = 47.2
-    max = 55.1
-  }
-  return ((value - min) / (max - min))
-}
-
-initalizeMapping()
 renderCounties()
