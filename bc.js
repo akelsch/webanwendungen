@@ -5,75 +5,70 @@ import { createSVGElement, normalize } from './common.js'
 const select = document.getElementById('state')
 const svg = document.getElementById('bar-chart')
 
-// Bundesland = state
-// Landkreis = county
-
-const counties = mapData.features.map(elem => elem.attributes)
+const sortedData = mapData.features.map(elem => elem.attributes)
   .sort((x, y) => y.cases_per_100k - x.cases_per_100k)
 
-function fillSelectWithStates () {
-  let states = new Set()
-  counties.forEach(county => states.add(county.BL))
+const maxCases = sortedData[0].cases_per_100k
 
-  states = [...states].sort()
-  states.forEach(state => {
-    const option = new Option(state, state)
-    select.appendChild(option)
-  })
+function initSelect () {
+  const states = new Set()
+  sortedData.forEach(county => states.add(county.BL))
+  Array.from(states).forEach(state => select.appendChild(new Option(state, state)))
 }
 
-function updateSvg (selection) {
+function drawBarChart ({ state = 'alle', amount = 5 }) {
   svg.innerHTML = ''
   let casesY = 11
   let countyY = 7
   let barY = 8
 
-  const top10 = counties.filter(county => county.BL === selection || selection === 'alle').slice(0, 10)
-  const max = top10[0].cases_per_100k
-  top10.forEach(county => {
-    renderCasesText(casesY, county.cases_per_100k)
-    renderCountyText(countyY, county.county, county.BL)
-    renderBarRect(barY, county.cases_per_100k, max)
+  const topN = sortedData.filter(county => county.BL === state || state === 'alle').slice(0, amount)
+  topN.forEach(county => {
+    const group = createSVGElement('g')
+    group.appendChild(createCasesText(casesY, county))
     casesY += 7
+    group.appendChild(createCountyText(countyY, county))
     countyY += 7
+    group.appendChild(createBarRect(barY, county))
     barY += 7
+    svg.appendChild(group)
   })
 }
 
-function renderCasesText (y, cases) {
+function createCasesText (y, county) {
   const text = createSVGElement('text', {
     x: 9,
     y: y,
     class: 'bar-text',
     'text-anchor': 'end'
   })
-  text.textContent = cases.toFixed(1)
-  svg.appendChild(text)
+  text.textContent = county.cases_per_100k.toFixed(1)
+  return text
 }
 
-function renderCountyText (y, county, state) {
+function createCountyText (y, county) {
   const text = createSVGElement('text', {
     x: 11,
     y: y,
     class: 'bar-text',
     'text-anchor': 'start'
   })
-  text.textContent = `${county} (${state})`
-  svg.appendChild(text)
+  text.textContent = `${county.county} (${county.BL})`
+  return text
 }
 
-function renderBarRect (y, cases, max) {
+function createBarRect (y, county) {
   const rect = createSVGElement('rect', {
-    width: normalize(cases, 0, max) * 69,
+    width: normalize(county.cases_per_100k, 0, maxCases) * 69,
     height: 3,
     x: 10,
     y: y,
     fill: 'lightblue',
     class: 'bar'
   })
-  svg.appendChild(rect)
+  return rect
 }
 
-fillSelectWithStates()
-updateSvg(select.value)
-select.onchange = event => updateSvg(event.target.value)
+initSelect()
+drawBarChart({ state: select.value })
+select.onchange = event => drawBarChart({ state: event.target.value })
