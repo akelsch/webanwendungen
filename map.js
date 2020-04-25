@@ -15,7 +15,7 @@ fillMap()
 
 function minMax(value, XY) {
   let min, max = 0;
-  //The values for Germany    
+  //The values for Germany
   if (XY === "X") {
     min = 5.8;
     max = 15.1;
