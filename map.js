@@ -5,20 +5,20 @@ const map = document.getElementById('map')
 
 const coordinates = mapData.features.map(elem => elem.geometry.rings)
 
-// Funktioniert noch nicht :(
-let pathCommands = 'M '
+// slice -> nur erster Kreis
+coordinates.slice(0, 1).forEach(county => {
+  let pathData = 'M '
+  // nur erster ring
+  county[0].forEach(([x, y]) => {
+    pathData += `${Math.trunc(x * 1000)},${Math.trunc(y * 1000)} `
+  })
+  pathData += 'Z'
 
-// Erster Kreis und davon der erste Ring (SK Flensburg)
-coordinates[0][0].forEach(([x, y]) => {
-  pathCommands += `${x},${y} `
+  const path = createSVGElement('path', {
+    fill: 'none',
+    stroke: 'black',
+    'stroke-width': 0.1,
+    d: pathData
+  })
+  map.appendChild(path)
 })
-
-pathCommands += 'Z'
-
-const path = createSVGElement('path', {
-  stroke: 'black',
-  'stroke-width': 0.01,
-  d: pathCommands
-})
-
-map.appendChild(path)
