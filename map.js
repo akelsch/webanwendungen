@@ -1,12 +1,17 @@
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize, determineMinMaxCoordinates } from './common.js'
 
+// DOM
 const svg = document.querySelector('#map')
 
+// Data
 const countyGeometryMapping = new Map()
 mapData.features.forEach(element => {
   countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
 })
+
+// Start
+drawMap() // TODO options
 
 function drawMap () {
   const minMaxData = determineMinMaxCoordinates(countyGeometryMapping)
@@ -28,5 +33,3 @@ function drawMap () {
     })
   }
 }
-
-drawMap() // TODO options

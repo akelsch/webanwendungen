@@ -23,6 +23,16 @@ svg {
   margin-right: 20px;
 }
 
+#map path {
+  /* Falls der path kein fill hat */
+  pointer-events: all;
+}
+
+#map path:hover {
+  stroke: red;
+  stroke-width: 0.2;
+}
+
 #bar-chart g {
   transition: opacity 500ms ease;
 }
