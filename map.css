@@ -29,6 +29,7 @@ svg {
 }
 
 #map path:hover {
+  visibility: visible;
   stroke: red;
   stroke-width: 0.2;
 }
@@ -47,3 +48,4 @@ svg {
    /* Dieser Wert sollte gleich 'barChartTransitionInMs' in bc.js sein */
   transition: width 750ms ease;
 }
+
