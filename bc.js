@@ -28,10 +28,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
 
   const topN = sortedData.filter(county => county.BL === state || state === 'alle').slice(0, amount)
   topN.forEach(county => {
-    const group = createSVGElement('g', {
-      opacity: 1,
-      style: 'opacity: 0;'
-    })
+    const group = createSVGElement('g', { opacity: 0, })
 
     group.appendChild(createCasesText(casesY, county))
     casesY += 7
@@ -47,7 +44,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
 
     // Referenz: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions#JavaScript_examples
     window.setTimeout(() => {
-      group.removeAttribute('style')
+      group.removeAttribute('opacity')
       bar.removeAttribute('style')
     }, barChartTransitionInMs * position++)
   })
