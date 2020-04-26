@@ -13,6 +13,11 @@ const barChartTransitionInMs = 750
 const sortedData = mapData.features.map(elem => elem.attributes)
   .sort((x, y) => y.cases_per_100k - x.cases_per_100k)
 
+// Start
+initSelect()
+drawBarChart({ state: select.value })
+select.onchange = event => drawBarChart({ state: event.target.value })
+
 function initSelect () {
   const states = new Set()
   sortedData.forEach(county => states.add(county.BL))
@@ -28,7 +33,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
 
   const topN = sortedData.filter(county => county.BL === state || state === 'alle').slice(0, amount)
   topN.forEach(county => {
-    const group = createSVGElement('g', { opacity: 0, })
+    const group = createSVGElement('g', { opacity: 0 })
 
     group.appendChild(createCasesText(casesY, county))
     casesY += 7
@@ -37,6 +42,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
     countyY += 7
 
     const bar = createBarRect(barY, county)
+    bar.style.width = 0
     group.appendChild(bar)
     barY += 7
 
@@ -54,7 +60,6 @@ function createCasesText (y, county) {
   const text = createSVGElement('text', {
     x: 9,
     y: y,
-    class: 'bar-text',
     'text-anchor': 'end'
   })
   text.textContent = county.cases_per_100k.toFixed(1)
@@ -65,7 +70,6 @@ function createCountyText (y, county) {
   const text = createSVGElement('text', {
     x: 11,
     y: y,
-    class: 'bar-text',
     'text-anchor': 'start'
   })
   text.textContent = `${county.county} (${county.BL})`
@@ -74,17 +78,11 @@ function createCountyText (y, county) {
 
 function createBarRect (y, county) {
   const rect = createSVGElement('rect', {
-    width: normalize(county.cases_per_100k, 0, sortedData[0].cases_per_100k) * 69,
-    height: 3,
     x: 10,
     y: y,
-    fill: 'lightblue',
-    class: 'bar',
-    style: 'width: 0;'
+    width: normalize(county.cases_per_100k, 0, sortedData[0].cases_per_100k) * 69,
+    height: 3,
+    fill: 'lightblue'
   })
   return rect
 }
-
-initSelect()
-drawBarChart({ state: select.value })
-select.onchange = event => drawBarChart({ state: event.target.value })

@@ -8,8 +8,8 @@ select {
   font-size: 20px;
 }
 
-/* Damit man den Umriss vom SVG erkennen kann */
 svg {
+  /* Damit man den Umriss vom SVG erkennen kann */
   border: 1px solid black;
 }
 
@@ -27,13 +27,13 @@ svg {
   transition: opacity 500ms ease;
 }
 
-.bar {
+#bar-chart g text {
+  font-size: 2px;
+}
+
+#bar-chart g rect {
   stroke: black;
   stroke-width: 0.1;
    /* Dieser Wert sollte gleich 'barChartTransitionInMs' in bc.js sein */
   transition: width 750ms ease;
-}
-
-.bar-text {
-  font-size: 2px;
 }
