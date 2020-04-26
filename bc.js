@@ -5,6 +5,8 @@ import { createSVGElement, normalize } from './common.js'
 const select = document.getElementById('state')
 const svg = document.getElementById('bar-chart')
 
+const barChartTimeoutInMs = 200
+
 const sortedData = mapData.features.map(elem => elem.attributes)
   .sort((x, y) => y.cases_per_100k - x.cases_per_100k)
 
@@ -29,9 +31,11 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
     casesY += 7
     group.appendChild(createCountyText(countyY, county))
     countyY += 7
-    group.appendChild(createBarRect(barY, county))
+    const bar = createBarRect(barY, county)
+    group.appendChild(bar)
     barY += 7
     svg.appendChild(group)
+    setTimeout(() => bar.removeAttribute('style'), barChartTimeoutInMs)
   })
 }
 
@@ -64,7 +68,8 @@ function createBarRect (y, county) {
     x: 10,
     y: y,
     fill: 'lightblue',
-    class: 'bar'
+    class: 'bar',
+    style: 'width: 0'
   })
   return rect
 }
