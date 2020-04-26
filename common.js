@@ -1,4 +1,4 @@
-export function createSVGElement(name, attributes) {
+export function createSVGElement (name, attributes) {
   const element = document.createElementNS('http://www.w3.org/2000/svg', name)
   for (const attName in attributes) {
     element.setAttribute(attName, String(attributes[attName]))
@@ -6,11 +6,11 @@ export function createSVGElement(name, attributes) {
   return element
 }
 
-export function normalize(x, min, max) {
+export function normalize (x, min, max) {
   return (x - min) / (max - min)
 }
 
-export function findMinMaxForXandYCoordinationPoints(countyGeometryMapping) {
+export function determineMinMaxCoordinates (countyGeometryMapping) {
   let minX = Infinity
   let minY = Infinity
   let maxX = 0
@@ -20,14 +20,13 @@ export function findMinMaxForXandYCoordinationPoints(countyGeometryMapping) {
       ring.forEach(([x, y]) => {
         if (minX > x) {
           minX = x
-        }
-        if (minY > y) {
-          minY = y
-        }
-        if (maxX < x) {
+        } else if (maxX < x) {
           maxX = x
         }
-        if (maxY < y) {
+
+        if (minY > y) {
+          minY = y
+        } else if (maxY < y) {
           maxY = y
         }
       })
