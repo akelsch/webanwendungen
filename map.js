@@ -8,7 +8,7 @@ mapData.features.forEach(element => {
   countyGeometryMapping.set(element.attributes.county, element.geometry.rings)
 })
 
-function renderCounties () {
+function drawMap () {
   const minMaxData = determineMinMaxCoordinates(countyGeometryMapping)
   for (const rings of countyGeometryMapping.values()) {
     rings.forEach(ring => {
@@ -29,4 +29,4 @@ function renderCounties () {
   }
 }
 
-renderCounties()
+drawMap() // TODO options
