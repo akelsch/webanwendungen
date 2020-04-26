@@ -23,10 +23,15 @@ svg {
   margin-right: 20px;
 }
 
+#bar-chart g {
+  transition: opacity 500ms ease;
+}
+
 .bar {
   stroke: black;
   stroke-width: 0.1;
-  transition: width 3s ease;
+   /* Dieser Wert sollte gleich 'barChartTransitionInMs' in bc.js sein */
+  transition: width 750ms ease;
 }
 
 .bar-text {
