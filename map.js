@@ -49,25 +49,30 @@ function drawMap () {
 
 function showPopUpWindow(path,popUpData){
   // TODO create new function for creating a new HTML element like the function createSVGElement
-  const containerDiv = document.createElement('div')
-  containerDiv.setAttribute('class','popUpContainer') 
-  const divPopUpWindow = document.createElement('div')
-  divPopUpWindow.setAttribute('class','popUpContent')
-  const closePopUpWindowButton = document.createElement('button')
-  closePopUpWindowButton.setAttribute('id','removePopUpButton')
-  closePopUpWindowButton.innerHTML = "&times;" 
-  divPopUpWindow.innerText = `Bezirk = ${popUpData.county}
-                              Bundesland = ${popUpData.bl}
-                              Einwohnerzahl = ${popUpData.numberOfResidents}
-                              Anzahl aller Infizierten = ${popUpData.allInfects} 
-                              Anzahl der Infizierten pro 100.000 Einwohner = ${popUpData.infectsBy100kInhabitant.toFixed(2)}
-                              Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popUpData.infectsBy100kInhabitantLast7Days.toFixed(2)}
-                              Anzahl der Toten = ${popUpData.deads}`
+    const test = document.querySelector('.popUpContainer') === null 
+    if(!test){
+      document.body.removeChild(document.querySelector('.popUpContainer'))
+    }
+    const containerDiv = document.createElement('div')
+    containerDiv.setAttribute('class','popUpContainer') 
+    const divPopUpWindow = document.createElement('div')
+    divPopUpWindow.setAttribute('class','popUpContent')
+    const closePopUpWindowButton = document.createElement('button')
+    closePopUpWindowButton.setAttribute('id','removePopUpButton')
+    closePopUpWindowButton.innerHTML = "&times;" 
+    divPopUpWindow.innerText = `Bezirk = ${popUpData.county}
+                                Bundesland = ${popUpData.bl}
+                                Einwohnerzahl = ${popUpData.numberOfResidents}
+                                Anzahl aller Infizierten = ${popUpData.allInfects} 
+                                Anzahl der Infizierten pro 100.000 Einwohner = ${popUpData.infectsBy100kInhabitant.toFixed(2)}
+                                Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popUpData.infectsBy100kInhabitantLast7Days.toFixed(2)}
+                                Anzahl der Toten = ${popUpData.deads}`
 
-  closePopUpWindowButton.addEventListener('click',() => {closePopUpWindow(containerDiv)})
-  containerDiv.appendChild(divPopUpWindow)
-  divPopUpWindow.appendChild(closePopUpWindowButton)
-  document.body.appendChild(containerDiv)
+    closePopUpWindowButton.addEventListener('click',() => {closePopUpWindow(containerDiv)})
+    containerDiv.appendChild(divPopUpWindow)
+    divPopUpWindow.appendChild(closePopUpWindowButton)
+    document.body.appendChild(containerDiv)
+  
                               
 }
 

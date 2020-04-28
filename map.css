@@ -68,6 +68,7 @@ svg {
   display: flex;
   padding: 20px;
   align-items: center;
+  
 }
 
 #removePopUpButton {
@@ -80,6 +81,5 @@ svg {
   align-items: stretch;
   top: -50%;
   position: relative;
-
 }
 
