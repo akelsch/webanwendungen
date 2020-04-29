@@ -1,6 +1,6 @@
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize, determineMinMaxCoordinates } from './common.js'
-import PopUpData from './model/popUpData.js'
+import PopupData from './model/PopupData.js'
 
 // DOM
 const svg = document.querySelector('#map')
@@ -8,14 +8,7 @@ const svg = document.querySelector('#map')
 // Data
 const countyGeometryMapping = new Map()
 mapData.features.forEach(element => {
-  const countyData = element.attributes
-  countyGeometryMapping.set(new PopUpData(countyData.county,
-    countyData.BL,
-    countyData.EWZ,
-    countyData.cases,
-    countyData.cases_per_100k,
-    countyData.cases7_per_100k,
-    countyData.deaths), element.geometry.rings)
+  countyGeometryMapping.set(new PopupData(element.attributes), element.geometry.rings)
 })
 
 // Start
@@ -55,11 +48,11 @@ function displayPopup (popupData) {
   popupDiv.setAttribute('class', 'popup')
   popupDiv.innerText = `Bezirk = ${popupData.county}
                         Bundesland = ${popupData.bl}
-                        Einwohnerzahl = ${popupData.numberOfResidents}
-                        Anzahl aller Infizierten = ${popupData.allInfects}
-                        Anzahl der Infizierten pro 100.000 Einwohner = ${popupData.infectsBy100kInhabitant.toFixed(2)}
-                        Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popupData.infectsBy100kInhabitantLast7Days.toFixed(2)}
-                        Anzahl der Toten = ${popupData.deads}`
+                        Einwohnerzahl = ${popupData.ewz}
+                        Anzahl aller Infizierten = ${popupData.cases}
+                        Anzahl der Infizierten pro 100.000 Einwohner = ${popupData.cases_per_100k.toFixed(2)}
+                        Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popupData.cases7_per_100k.toFixed(2)}
+                        Anzahl der Toten = ${popupData.deaths}`
 
   const closePopupButton = document.createElement('button')
   closePopupButton.textContent = 'x'

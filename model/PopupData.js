@@ -1,13 +1,11 @@
-class PopUpData {
-  constructor (county, bl, numberOfResidents, allInfects, infectsBy100kInhabitant, infectsBy100kInhabitantLast7Days, deads) {
-    this.county = county
-    this.bl = bl
-    this.numberOfResidents = numberOfResidents
-    this.allInfects = allInfects
-    this.infectsBy100kInhabitant = infectsBy100kInhabitant
-    this.infectsBy100kInhabitantLast7Days = infectsBy100kInhabitantLast7Days
-    this.deads = deads
+export default class PopupData {
+  constructor (attributes) {
+    this.county = attributes.county
+    this.bl = attributes.BL
+    this.ewz = attributes.EWZ
+    this.cases = attributes.cases
+    this.cases_per_100k = attributes.cases_per_100k
+    this.cases7_per_100k = attributes.cases7_per_100k
+    this.deaths = attributes.deaths
   }
 }
-
-export default PopUpData
