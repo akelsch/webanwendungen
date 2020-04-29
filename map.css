@@ -9,7 +9,6 @@ select {
 }
 
 svg {
-  /* Damit man den Umriss vom SVG erkennen kann */
   border: 1px solid black;
 }
 
@@ -23,12 +22,8 @@ svg {
   margin-right: 20px;
 }
 
-#map path {
-  /* Falls der path kein fill hat */
-  pointer-events: all;
-}
-
 #map path:hover {
+  /* TODO Diese CSS properties müssen in JS als Option rein */
   stroke: red;
   stroke-width: 0.2;
 }

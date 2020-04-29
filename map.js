@@ -8,9 +8,9 @@ const svg = document.querySelector('#map')
 const countyData = mapData.features
 
 // Start
-drawMap() // TODO options
+drawMap({})
 
-function drawMap () {
+function drawMap ({ stroke = 'black', hue = '240' }) {
   const minMaxData = determineMinMaxCoordinates()
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
@@ -21,8 +21,8 @@ function drawMap () {
       pathData += 'Z'
 
       const path = createSVGElement('path', {
-        fill: 'none', // TODO hsl
-        stroke: 'black', // TODO als Option
+        fill: `hsl(${hue}, 100%, 50%)`, // TODO letzter Wert muss dynamisch berechnet werden von 50-100
+        stroke: stroke,
         'stroke-width': 0.1,
         d: pathData
       })
