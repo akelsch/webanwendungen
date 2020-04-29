@@ -11,7 +11,7 @@ const countyData = mapData.features
 drawMap({})
 
 function drawMap ({ stroke = 'black', hue = '240' }) {
-  const minMaxData = determineMinMaxCoordinates()
+  const minMaxData = determineMinMaxData()
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
       let pathData = 'M '
@@ -20,8 +20,9 @@ function drawMap ({ stroke = 'black', hue = '240' }) {
       })
       pathData += 'Z'
 
+      const lightness = 100 - normalize(elem.attributes.cases_per_100k, minMaxData.minCases, minMaxData.maxCases) * 50
       const path = createSVGElement('path', {
-        fill: `hsl(${hue}, 100%, 50%)`, // TODO letzter Wert muss dynamisch berechnet werden von 50-100
+        fill: `hsl(${hue}, 100%, ${lightness}%)`,
         stroke: stroke,
         'stroke-width': 0.1,
         d: pathData
@@ -33,12 +34,21 @@ function drawMap ({ stroke = 'black', hue = '240' }) {
   })
 }
 
-function determineMinMaxCoordinates () {
+function determineMinMaxData () {
   let minX = Infinity
   let minY = Infinity
+  let minCases = Infinity
   let maxX = 0
   let maxY = 0
+  let maxCases = 0
   countyData.forEach(elem => {
+    const cases = elem.attributes.cases_per_100k
+    if (minCases > cases) {
+      minCases = cases
+    } else if (maxCases < cases) {
+      maxCases = cases
+    }
+
     elem.geometry.rings.forEach(ring => {
       ring.forEach(([x, y]) => {
         if (minX > x) {
@@ -56,7 +66,7 @@ function determineMinMaxCoordinates () {
     })
   })
   return {
-    minX, maxX, minY, maxY
+    minX, maxX, minY, maxY, minCases, maxCases
   }
 }
 
