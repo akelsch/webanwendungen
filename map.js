@@ -38,14 +38,13 @@ function drawMap () {
 }
 
 function displayPopup (popupData) {
-  // TODO create new function for creating a new HTML element like the function createSVGElement
-  // const test = document.querySelector('.popup') === null
-  // if (!test) {
-  //   document.body.removeChild(document.querySelector('.popup'))
-  // }
+  const popupDom = document.querySelector('#popup')
+  if (popupDom) {
+    popupDom.remove()
+  }
 
   const popupDiv = document.createElement('div')
-  popupDiv.setAttribute('class', 'popup')
+  popupDiv.id = 'popup'
   popupDiv.innerText = `Bezirk = ${popupData.county}
                         Bundesland = ${popupData.bl}
                         Einwohnerzahl = ${popupData.ewz}
