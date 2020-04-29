@@ -21,7 +21,7 @@ select.onchange = event => drawBarChart({ state: event.target.value })
 function initSelect () {
   const states = new Set()
   sortedData.forEach(county => states.add(county.BL))
-  Array.from(states).forEach(state => select.appendChild(new Option(state, state)))
+  Array.from(states).sort().forEach(state => select.appendChild(new Option(state, state)))
 }
 
 function drawBarChart ({ state = 'alle', amount = 5 }) {
