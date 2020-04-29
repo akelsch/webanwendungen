@@ -29,7 +29,6 @@ svg {
 }
 
 #map path:hover {
-  visibility: visible;
   stroke: red;
   stroke-width: 0.2;
 }
