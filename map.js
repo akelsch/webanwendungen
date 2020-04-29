@@ -8,10 +8,10 @@ const svg = document.querySelector('#map')
 const countyData = mapData.features
 
 // Start
-drawMap({})
+drawMap({ })
 
-function drawMap ({ stroke = 'black', hue = '240' }) {
-  const minMaxData = determineMinMaxData()
+function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k' }) {
+  const minMaxData = determineMinMaxData(minMaxSource)
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
       let pathData = 'M '
@@ -20,7 +20,7 @@ function drawMap ({ stroke = 'black', hue = '240' }) {
       })
       pathData += 'Z'
 
-      const lightness = 100 - normalize(elem.attributes.cases_per_100k, minMaxData.minCases, minMaxData.maxCases) * 50
+      const lightness = 100 - normalize(elem.attributes[minMaxSource], minMaxData.minCases, minMaxData.maxCases) * 50
       const path = createSVGElement('path', {
         fill: `hsl(${hue}, 100%, ${lightness}%)`,
         stroke: stroke,
@@ -34,7 +34,7 @@ function drawMap ({ stroke = 'black', hue = '240' }) {
   })
 }
 
-function determineMinMaxData () {
+function determineMinMaxData (minMaxSource) {
   let minX = Infinity
   let minY = Infinity
   let minCases = Infinity
@@ -42,7 +42,7 @@ function determineMinMaxData () {
   let maxY = 0
   let maxCases = 0
   countyData.forEach(elem => {
-    const cases = elem.attributes.cases_per_100k
+    const cases = elem.attributes[minMaxSource]
     if (minCases > cases) {
       minCases = cases
     } else if (maxCases < cases) {
