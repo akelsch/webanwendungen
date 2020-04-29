@@ -1,6 +1,7 @@
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize, determineMinMaxCoordinates } from './common.js'
 import PopUpData from './model/popUpData.js'
+
 // DOM
 const svg = document.querySelector('#map')
 
@@ -22,7 +23,7 @@ drawMap() // TODO options
 
 function drawMap () {
   const minMaxData = determineMinMaxCoordinates(countyGeometryMapping)
-  for (const [popUpData, rings] of countyGeometryMapping) {
+  for (const [popupData, rings] of countyGeometryMapping) {
     rings.forEach(ring => {
       let pathData = 'M '
       ring.forEach(([x, y]) => {
@@ -36,44 +37,34 @@ function drawMap () {
         'stroke-width': 0.1,
         d: pathData
       })
-      // create tooltip element
-      const ttBox = document.createElement('div')
-      // set style
 
-      path.addEventListener('mouseover', () => console.log(popUpData.county))
-      path.addEventListener('click', () => { showPopUpWindow(path, popUpData) })
+      path.onclick = () => displayPopup(popupData)
       svg.appendChild(path)
     })
   }
 }
 
-function showPopUpWindow (path, popUpData) {
+function displayPopup (popupData) {
   // TODO create new function for creating a new HTML element like the function createSVGElement
-  const test = document.querySelector('.popUpContainer') === null
-  if (!test) {
-    document.body.removeChild(document.querySelector('.popUpContainer'))
-  }
-  const containerDiv = document.createElement('div')
-  containerDiv.setAttribute('class', 'popUpContainer')
-  const divPopUpWindow = document.createElement('div')
-  divPopUpWindow.setAttribute('class', 'popUpContent')
-  const closePopUpWindowButton = document.createElement('button')
-  closePopUpWindowButton.setAttribute('id', 'removePopUpButton')
-  closePopUpWindowButton.innerHTML = '&times;'
-  divPopUpWindow.innerText = `Bezirk = ${popUpData.county}
-                                Bundesland = ${popUpData.bl}
-                                Einwohnerzahl = ${popUpData.numberOfResidents}
-                                Anzahl aller Infizierten = ${popUpData.allInfects}
-                                Anzahl der Infizierten pro 100.000 Einwohner = ${popUpData.infectsBy100kInhabitant.toFixed(2)}
-                                Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popUpData.infectsBy100kInhabitantLast7Days.toFixed(2)}
-                                Anzahl der Toten = ${popUpData.deads}`
+  // const test = document.querySelector('.popup') === null
+  // if (!test) {
+  //   document.body.removeChild(document.querySelector('.popup'))
+  // }
 
-  closePopUpWindowButton.addEventListener('click', () => { closePopUpWindow(containerDiv) })
-  containerDiv.appendChild(divPopUpWindow)
-  divPopUpWindow.appendChild(closePopUpWindowButton)
-  document.body.appendChild(containerDiv)
-}
+  const popupDiv = document.createElement('div')
+  popupDiv.setAttribute('class', 'popup')
+  popupDiv.innerText = `Bezirk = ${popupData.county}
+                        Bundesland = ${popupData.bl}
+                        Einwohnerzahl = ${popupData.numberOfResidents}
+                        Anzahl aller Infizierten = ${popupData.allInfects}
+                        Anzahl der Infizierten pro 100.000 Einwohner = ${popupData.infectsBy100kInhabitant.toFixed(2)}
+                        Anzahl der Infizierten pro 100.000 Einwohner der letzten 7 Tage = ${popupData.infectsBy100kInhabitantLast7Days.toFixed(2)}
+                        Anzahl der Toten = ${popupData.deads}`
 
-function closePopUpWindow (popUp) {
-  document.body.removeChild(popUp)
+  const closePopupButton = document.createElement('button')
+  closePopupButton.textContent = 'x'
+  closePopupButton.onclick = () => popupDiv.remove()
+  popupDiv.appendChild(closePopupButton)
+
+  svg.parentNode.insertBefore(popupDiv, svg)
 }
