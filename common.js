@@ -10,29 +10,19 @@ export function normalize (x, min, max) {
   return (x - min) / (max - min)
 }
 
-export function determineMinMaxCoordinates (countyGeometryMapping) {
-  let minX = Infinity
-  let minY = Infinity
-  let maxX = 0
-  let maxY = 0
-  for (const rings of countyGeometryMapping.values()) {
-    rings.forEach(ring => {
-      ring.forEach(([x, y]) => {
-        if (minX > x) {
-          minX = x
-        } else if (maxX < x) {
-          maxX = x
-        }
+export function createTable () {
+  const table = document.createElement('table')
+  const tbody = document.createElement('tbody')
+  table.appendChild(tbody)
+  return table
+}
 
-        if (minY > y) {
-          minY = y
-        } else if (maxY < y) {
-          maxY = y
-        }
-      })
-    })
-  }
-  return {
-    minX, maxX, minY, maxY
-  }
+export function appendRowToTable (table, ...row) {
+  const tr = document.createElement('tr')
+  row.forEach(data => {
+    const td = document.createElement('td')
+    td.textContent = data
+    tr.appendChild(td)
+  })
+  table.firstChild.appendChild(tr)
 }
