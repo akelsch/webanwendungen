@@ -1,23 +1,19 @@
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize, createTable, appendRowToTable } from './common.js'
-import PopupData from './model/PopupData.js'
 
 // DOM
 const svg = document.querySelector('#map')
 
 // Data
-const data = new Map()
-mapData.features.forEach(element => {
-  data.set(new PopupData(element.attributes), element.geometry.rings)
-})
+const countyData = mapData.features
 
 // Start
 drawMap() // TODO options
 
 function drawMap () {
-  const minMaxData = determineMinMaxCoordinates(data.values())
-  for (const [popupData, rings] of data) {
-    rings.forEach(ring => {
+  const minMaxData = determineMinMaxCoordinates()
+  countyData.forEach(elem => {
+    elem.geometry.rings.forEach(ring => {
       let pathData = 'M '
       ring.forEach(([x, y]) => {
         pathData += `${normalize(x, minMaxData.minX, minMaxData.maxX) * 100},${normalize(y, minMaxData.minY, minMaxData.maxY) * 100} `
@@ -31,19 +27,19 @@ function drawMap () {
         d: pathData
       })
 
-      path.onclick = () => displayPopup(popupData)
+      path.onclick = () => displayPopup(elem.attributes)
       svg.appendChild(path)
     })
-  }
+  })
 }
 
-function determineMinMaxCoordinates (data) {
+function determineMinMaxCoordinates () {
   let minX = Infinity
   let minY = Infinity
   let maxX = 0
   let maxY = 0
-  for (const rings of data) {
-    rings.forEach(ring => {
+  countyData.forEach(elem => {
+    elem.geometry.rings.forEach(ring => {
       ring.forEach(([x, y]) => {
         if (minX > x) {
           minX = x
@@ -58,13 +54,13 @@ function determineMinMaxCoordinates (data) {
         }
       })
     })
-  }
+  })
   return {
     minX, maxX, minY, maxY
   }
 }
 
-function displayPopup (popupData) {
+function displayPopup (attributes) {
   const popupDom = document.querySelector('#popup')
   if (popupDom) {
     popupDom.remove()
@@ -78,13 +74,13 @@ function displayPopup (popupData) {
   closePopupButton.onclick = () => popupDiv.remove()
 
   const dataTable = createTable()
-  appendRowToTable(dataTable, 'Kreis', popupData.county)
-  appendRowToTable(dataTable, 'Bundesland', popupData.bl)
-  appendRowToTable(dataTable, 'Einwohnerzahl', popupData.ewz)
-  appendRowToTable(dataTable, 'Fälle', popupData.cases)
-  appendRowToTable(dataTable, 'Fälle/100T Einwohner', popupData.cases_per_100k.toFixed(1))
-  appendRowToTable(dataTable, 'In den letzten 7 Tagen', popupData.cases7_per_100k.toFixed(1))
-  appendRowToTable(dataTable, 'Todesfälle', popupData.deaths)
+  appendRowToTable(dataTable, 'Kreis', attributes.county)
+  appendRowToTable(dataTable, 'Bundesland', attributes.BL)
+  appendRowToTable(dataTable, 'Einwohnerzahl', attributes.EWZ)
+  appendRowToTable(dataTable, 'Fälle', attributes.cases)
+  appendRowToTable(dataTable, 'Fälle/100T Einwohner', attributes.cases_per_100k.toFixed(1))
+  appendRowToTable(dataTable, 'In den letzten 7 Tagen', attributes.cases7_per_100k.toFixed(1))
+  appendRowToTable(dataTable, 'Todesfälle', attributes.deaths)
 
   popupDiv.appendChild(closePopupButton)
   popupDiv.appendChild(dataTable)
