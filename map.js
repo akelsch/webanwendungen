@@ -28,6 +28,10 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
         d: pathData
       })
 
+      const title = createSVGElement('title')
+      title.textContent = elem.attributes.county
+      path.appendChild(title)
+
       path.onclick = () => displayPopup(elem.attributes)
       svg.appendChild(path)
     })
@@ -82,6 +86,7 @@ function displayPopup (attributes) {
   const closePopupButton = document.createElement('button')
   closePopupButton.textContent = 'x'
   closePopupButton.onclick = () => popupDiv.remove()
+  popupDiv.appendChild(closePopupButton)
 
   const dataTable = createTable()
   appendRowToTable(dataTable, 'Kreis', attributes.county)
@@ -91,8 +96,6 @@ function displayPopup (attributes) {
   appendRowToTable(dataTable, 'Fälle/100T Einwohner', attributes.cases_per_100k.toFixed(1))
   appendRowToTable(dataTable, 'In den letzten 7 Tagen', attributes.cases7_per_100k.toFixed(1))
   appendRowToTable(dataTable, 'Todesfälle', attributes.deaths)
-
-  popupDiv.appendChild(closePopupButton)
   popupDiv.appendChild(dataTable)
 
   svg.parentNode.insertBefore(popupDiv, svg)
