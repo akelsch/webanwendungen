@@ -32,7 +32,14 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
       title.textContent = elem.attributes.county
       path.appendChild(title)
 
-      path.onclick = () => displayPopup(elem.attributes)
+      path.onclick = (event) => displayPopup(event, elem.attributes)
+
+      path.onmouseleave = () => {
+        const popupDom = document.getElementById('popup')
+        if (popupDom) {
+          popupDom.remove()
+        }
+      }
       svg.appendChild(path)
     })
   })
@@ -74,7 +81,7 @@ function determineMinMaxData (minMaxSource) {
   }
 }
 
-function displayPopup (attributes) {
+function displayPopup (event, attributes) {
   const popupDom = document.querySelector('#popup')
   if (popupDom) {
     popupDom.remove()
@@ -82,11 +89,8 @@ function displayPopup (attributes) {
 
   const popupDiv = document.createElement('div')
   popupDiv.id = 'popup'
-
-  const closePopupButton = document.createElement('button')
-  closePopupButton.textContent = 'x'
-  closePopupButton.onclick = () => popupDiv.remove()
-  popupDiv.appendChild(closePopupButton)
+  popupDiv.style.left = `${event.clientX}px`
+  popupDiv.style.top = `${event.clientY}px`
 
   const dataTable = createTable()
   appendRowToTable(dataTable, 'Kreis', attributes.county)
