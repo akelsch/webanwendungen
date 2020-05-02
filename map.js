@@ -39,7 +39,7 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
 
       path.onclick = (event) => displayPopup(event, elem.attributes)
 
-      path.onmouseover = event => {
+      path.onmouseover = () => {
         path.setAttribute('stroke', hoverStroke)
         path.setAttribute('stroke-width', 0.2)
       }

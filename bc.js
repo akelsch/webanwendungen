@@ -6,7 +6,7 @@ const select = document.getElementById('state')
 const svg = document.getElementById('bar-chart')
 const options = document.querySelector('#option')
 // User option data
-const option = {
+const optionData = {
   state: 'alle',
   color: 'lightblue',
   amount: 5
@@ -18,12 +18,12 @@ const barChartTransitionInMs = 750
 // Eventlistner
 options.addEventListener('change', event => {
   setOptions(event.target.value)
-  drawBarChart(option)
+  drawBarChart(optionData)
 })
 
 select.onchange = event => {
-  option.state = event.target.value
-  drawBarChart(option)
+  optionData.state = event.target.value
+  drawBarChart(optionData)
 }
 
 // Data
@@ -106,23 +106,23 @@ function createBarRect (y, county, color) {
 function setOptions (choice) {
   switch (choice) {
     case 'red':
-      option.color = 'red'
-      option.amount = 3
+      optionData.color = 'red'
+      optionData.amount = 3
       break
     case 'yellow':
-      option.color = 'yellow'
-      option.amount = 6
+      optionData.color = 'yellow'
+      optionData.amount = 6
       break
     case 'purple':
-      option.color = 'purple'
-      option.amount = 2
+      optionData.color = 'purple'
+      optionData.amount = 2
       break
     case 'green':
-      option.color = 'green'
-      option.amount = 4
+      optionData.color = 'green'
+      optionData.amount = 4
       break
     default:
-      option.color = 'lightblue'
-      option.amount = 5
+      optionData.color = 'lightblue'
+      optionData.amount = 5
   }
 }
