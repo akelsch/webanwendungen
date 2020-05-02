@@ -1,13 +1,30 @@
 /* eslint-env browser */
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize } from './common.js'
-
 // DOM
 const select = document.getElementById('state')
 const svg = document.getElementById('bar-chart')
+const options = document.querySelector('#option')
+// User option data
+const option = {
+  state: 'alle',
+  color: 'lightblue',
+  amount: 5
+}
 
 // CSS
 const barChartTransitionInMs = 750
+
+// Eventlistner
+options.addEventListener('change', event => {
+  setOptions(event.target.value)
+  drawBarChart(option)
+})
+
+select.onchange = event => {
+  option.state = event.target.value
+  drawBarChart(option)
+}
 
 // Data
 const sortedData = mapData.features.map(elem => elem.attributes)
@@ -16,7 +33,6 @@ const sortedData = mapData.features.map(elem => elem.attributes)
 // Start
 initSelect()
 drawBarChart({ state: select.value })
-select.onchange = event => drawBarChart({ state: event.target.value })
 
 function initSelect () {
   const states = new Set()
@@ -24,7 +40,7 @@ function initSelect () {
   Array.from(states).sort().forEach(state => select.appendChild(new Option(state, state)))
 }
 
-function drawBarChart ({ state = 'alle', amount = 5 }) {
+function drawBarChart ({ state = 'alle', amount = 5, color = 'lightblue' }) {
   svg.innerHTML = ''
   let casesY = 11
   let countyY = 7
@@ -41,7 +57,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
     group.appendChild(createCountyText(countyY, county))
     countyY += 7
 
-    const bar = createBarRect(barY, county)
+    const bar = createBarRect(barY, county, color)
     bar.style.width = 0
     group.appendChild(bar)
     barY += 7
@@ -76,13 +92,37 @@ function createCountyText (y, county) {
   return text
 }
 
-function createBarRect (y, county) {
+function createBarRect (y, county, color) {
   const rect = createSVGElement('rect', {
     x: 10,
     y: y,
     width: normalize(county.cases_per_100k, 0, sortedData[0].cases_per_100k) * 69,
     height: 3,
-    fill: 'lightblue'
+    fill: color
   })
   return rect
+}
+
+function setOptions (choice) {
+  switch (choice) {
+    case 'red':
+      option.color = 'red'
+      option.amount = 3
+      break
+    case 'yellow':
+      option.color = 'yellow'
+      option.amount = 6
+      break
+    case 'purple':
+      option.color = 'purple'
+      option.amount = 2
+      break
+    case 'green':
+      option.color = 'green'
+      option.amount = 4
+      break
+    default:
+      option.color = 'lightblue'
+      option.amount = 5
+  }
 }

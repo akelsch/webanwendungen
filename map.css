@@ -22,12 +22,6 @@ svg {
   margin-right: 20px;
 }
 
-#map path:hover {
-  /* TODO Diese CSS properties müssen in JS als Option rein */
-  stroke: red;
-  stroke-width: 0.2;
-}
-
 #bar-chart g {
   transition: opacity 500ms ease;
 }

@@ -3,14 +3,19 @@ import { createSVGElement, normalize, createTable, appendRowToTable } from './co
 
 // DOM
 const svg = document.querySelector('#map')
-
+const options = document.querySelector('#option')
 // Data
 const countyData = mapData.features
 
+// Event Listner
+options.addEventListener('change', event => {
+  drawMap(getOptions(event.target.value))
+})
 // Start
 drawMap({ })
 
-function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k' }) {
+function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k', hoverStroke = 'red' }) {
+  console.log(stroke)
   const minMaxData = determineMinMaxData(minMaxSource)
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
@@ -34,11 +39,17 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
 
       path.onclick = (event) => displayPopup(event, elem.attributes)
 
+      path.onmouseover = event => {
+        path.setAttribute('stroke', hoverStroke)
+        path.setAttribute('stroke-width', 0.2)
+      }
       path.onmouseleave = () => {
         const popupDom = document.getElementById('popup')
         if (popupDom) {
           popupDom.remove()
         }
+        path.setAttribute('stroke', stroke)
+        path.setAttribute('stroke-width', 0.1)
       }
       svg.appendChild(path)
     })
@@ -103,4 +114,19 @@ function displayPopup (event, attributes) {
   popupDiv.appendChild(dataTable)
 
   svg.parentNode.insertBefore(popupDiv, svg)
+}
+
+function getOptions (choice) {
+  switch (choice) {
+    case 'red':
+      return { stroke: 'black', hue: '1', minMaxSource: 'cases_per_100k', hoverStroke: 'green' }
+    case 'yellow':
+      return { stroke: 'green', hue: '61', minMaxSource: 'cases7_per_100k', hoverStroke: 'orange' }
+    case 'purple':
+      return { stroke: 'blue', hue: '283', minMaxSource: 'cases_per_100k', hoverStroke: 'yellow' }
+    case 'green':
+      return { stroke: 'red', hue: '123', minMaxSource: 'cases7_per_100k', hoverStroke: 'blue' }
+    default:
+      return { stroke: 'black', hue: '240', minMaxSource: 'cases_per_100k', hoverStroke: 'red' }
+  }
 }
