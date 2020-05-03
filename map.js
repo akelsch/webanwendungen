@@ -4,13 +4,13 @@ import { createSVGElement, normalize, createTable, appendRowToTable } from './co
 // DOM
 const svg = document.querySelector('#map')
 const options = document.querySelector('#option')
-// Data
-const countyData = mapData.features
-
-// Event Listner
 options.addEventListener('change', event => {
   drawMap(getOptions(event.target.value))
 })
+
+// Data
+const countyData = mapData.features
+
 // Start
 drawMap({ })
 
@@ -32,25 +32,21 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
         'stroke-width': 0.1,
         d: pathData
       })
-
-      const title = createSVGElement('title')
-      title.textContent = elem.attributes.county
-      path.appendChild(title)
-
       path.onclick = (event) => displayPopup(event, elem.attributes)
-
       path.onmouseover = () => {
         path.setAttribute('stroke', hoverStroke)
         path.setAttribute('stroke-width', 0.2)
       }
       path.onmouseleave = () => {
-        const popupDom = document.getElementById('popup')
-        if (popupDom) {
-          popupDom.remove()
-        }
+        clearPopup()
         path.setAttribute('stroke', stroke)
         path.setAttribute('stroke-width', 0.1)
       }
+
+      const title = createSVGElement('title')
+      title.textContent = elem.attributes.county
+      path.appendChild(title)
+
       svg.appendChild(path)
     })
   })
@@ -93,10 +89,7 @@ function determineMinMaxData (minMaxSource) {
 }
 
 function displayPopup (event, attributes) {
-  const popupDom = document.querySelector('#popup')
-  if (popupDom) {
-    popupDom.remove()
-  }
+  clearPopup()
 
   const popupDiv = document.createElement('div')
   popupDiv.id = 'popup'
@@ -114,6 +107,13 @@ function displayPopup (event, attributes) {
   popupDiv.appendChild(dataTable)
 
   svg.parentNode.insertBefore(popupDiv, svg)
+}
+
+function clearPopup () {
+  const popup = document.querySelector('#popup')
+  if (popup) {
+    popup.remove()
+  }
 }
 
 function getOptions (choice) {
