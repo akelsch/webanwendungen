@@ -24,21 +24,6 @@ svg {
   stroke-width: 0.2;
 }
 
-#bar-chart g {
-  transition: opacity 500ms ease;
-}
-
-#bar-chart g text {
-  font-size: 2px;
-}
-
-#bar-chart g rect {
-  stroke: black;
-  stroke-width: 0.1;
-  /* Dieser Wert sollte gleich 'barChartTransitionInMs' in bc.js sein */
-  transition: width 750ms ease;
-}
-
 #popup {
   position: absolute;
   z-index: 1;
@@ -54,4 +39,23 @@ svg {
 
 #popup td:nth-child(2) {
   padding-left: 20px;
+}
+
+#bar-chart g {
+  transition: opacity 500ms ease;
+}
+
+#bar-chart g text {
+  font-size: 2px;
+}
+
+#bar-chart g rect {
+  stroke: black;
+  stroke-width: 0.1;
+  /* Dieser Wert sollte gleich 'barChartTransitionInMs' in bc.js sein */
+  transition: width 750ms ease;
+}
+
+.highlight {
+  transition: stroke-width 750ms ease;
 }

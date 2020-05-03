@@ -18,7 +18,7 @@ const sortedData = mapData.features.map(elem => elem.attributes)
 // Start
 initSelect()
 drawBarChart({ state: select.value })
-select.onchange = () => drawBarChart(getOptions())
+select.addEventListener('change', () => drawBarChart(getOptions()))
 
 function initSelect () {
   const states = new Set()
@@ -26,7 +26,7 @@ function initSelect () {
   Array.from(states).sort().forEach(state => select.appendChild(new Option(state, state)))
 }
 
-function drawBarChart ({ state = 'alle', amount = 5, fill = 'lightblue' }) {
+function drawBarChart ({ state = 'alle', amount = 5, fill = 'lightblue', stroke = 'red', strokeWidth = '0.2' }) {
   svg.innerHTML = ''
   let casesY = 11
   let countyY = 7
@@ -54,6 +54,9 @@ function drawBarChart ({ state = 'alle', amount = 5, fill = 'lightblue' }) {
     window.setTimeout(() => {
       group.removeAttribute('opacity')
       bar.removeAttribute('style')
+      window.dispatchEvent(new CustomEvent('highlight', {
+        detail: { county: county.county, stroke: stroke, strokeWidth: strokeWidth }
+      }))
     }, barChartTransitionInMs * position++)
   })
 }
@@ -94,13 +97,13 @@ function getOptions () {
   const state = select.value
   switch (selection) {
     case 'red':
-      return { state: state, amount: 3, fill: 'red' }
+      return { state: state, amount: 3, fill: 'red', stroke: 'yellow', strokeWidth: '0.1' }
     case 'yellow':
-      return { state: state, amount: 4, fill: 'yellow' }
+      return { state: state, amount: 4, fill: 'yellow', stroke: 'blue', strokeWidth: '0.4' }
     case 'green':
-      return { state: state, amount: 5, fill: 'green' }
+      return { state: state, amount: 5, fill: 'green', stroke: 'white', strokeWidth: '0.2' }
     case 'blue':
-      return { state: state, amount: 6, fill: 'blue' }
+      return { state: state, amount: 6, fill: 'blue', stroke: 'black', strokeWidth: '0.3' }
     default:
       return { state: state }
   }

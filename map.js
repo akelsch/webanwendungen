@@ -6,12 +6,15 @@ const option = document.querySelector('#option')
 option.addEventListener('change', event => drawMap(getOptions(event.target.value)))
 const popup = document.querySelector('#popup')
 const svg = document.querySelector('#map')
+const state = document.getElementById('state')
 
 // Data
 const countyData = mapData.features
 
 // Start
 drawMap({ })
+state.addEventListener('change', () => resetCountyHighlight())
+window.addEventListener('highlight', (event) => highlightCounty(event))
 
 function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k' }) {
   svg.innerHTML = ''
@@ -111,4 +114,20 @@ function getOptions (selection) {
     default:
       return { }
   }
+}
+
+function resetCountyHighlight () {
+  Array.from(svg.children).forEach(path => {
+    path.removeAttribute('class')
+    path.removeAttribute('style')
+  })
+}
+
+function highlightCounty (event) {
+  Array.from(svg.children).filter(path => path.textContent === event.detail.county)
+    .forEach(path => {
+      path.classList.add('highlight')
+      path.style.stroke = event.detail.stroke
+      path.style['stroke-width'] = event.detail.strokeWidth
+    })
 }
