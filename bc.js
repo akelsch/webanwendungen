@@ -26,7 +26,7 @@ function initSelect () {
   Array.from(states).sort().forEach(state => select.appendChild(new Option(state, state)))
 }
 
-function drawBarChart ({ state = 'alle', amount = 5, color = 'lightblue' }) {
+function drawBarChart ({ state = 'alle', amount = 5, fill = 'lightblue' }) {
   svg.innerHTML = ''
   let casesY = 11
   let countyY = 7
@@ -43,7 +43,7 @@ function drawBarChart ({ state = 'alle', amount = 5, color = 'lightblue' }) {
     group.appendChild(createCountyText(countyY, county))
     countyY += 7
 
-    const bar = createBarRect(barY, county, color)
+    const bar = createBarRect(barY, county, fill)
     bar.style.width = 0
     group.appendChild(bar)
     barY += 7
@@ -78,13 +78,13 @@ function createCountyText (y, county) {
   return text
 }
 
-function createBarRect (y, county, color) {
+function createBarRect (y, county, fill) {
   const rect = createSVGElement('rect', {
     x: 10,
     y: y,
     width: normalize(county.cases_per_100k, 0, sortedData[0].cases_per_100k) * 69,
     height: 3,
-    fill: color
+    fill: fill
   })
   return rect
 }
@@ -94,13 +94,13 @@ function getOptions () {
   const state = select.value
   switch (selection) {
     case 'red':
-      return { state: state, amount: 3, color: 'red' }
+      return { state: state, amount: 3, fill: 'red' }
     case 'yellow':
-      return { state: state, amount: 4, color: 'yellow' }
+      return { state: state, amount: 4, fill: 'yellow' }
     case 'green':
-      return { state: state, amount: 5, color: 'green' }
+      return { state: state, amount: 5, fill: 'green' }
     case 'blue':
-      return { state: state, amount: 6, color: 'blue' }
+      return { state: state, amount: 6, fill: 'blue' }
     default:
       return { state: state }
   }
