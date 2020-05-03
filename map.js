@@ -27,19 +27,13 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
         'stroke-width': 0.1,
         d: pathData
       })
+      path.onclick = (event) => displayPopup(event, elem.attributes)
+      path.onmouseleave = () => clearPopup()
 
       const title = createSVGElement('title')
       title.textContent = elem.attributes.county
       path.appendChild(title)
 
-      path.onclick = (event) => displayPopup(event, elem.attributes)
-
-      path.onmouseleave = () => {
-        const popupDom = document.getElementById('popup')
-        if (popupDom) {
-          popupDom.remove()
-        }
-      }
       svg.appendChild(path)
     })
   })
@@ -82,10 +76,7 @@ function determineMinMaxData (minMaxSource) {
 }
 
 function displayPopup (event, attributes) {
-  const popupDom = document.querySelector('#popup')
-  if (popupDom) {
-    popupDom.remove()
-  }
+  clearPopup()
 
   const popupDiv = document.createElement('div')
   popupDiv.id = 'popup'
@@ -103,4 +94,11 @@ function displayPopup (event, attributes) {
   popupDiv.appendChild(dataTable)
 
   svg.parentNode.insertBefore(popupDiv, svg)
+}
+
+function clearPopup () {
+  const popup = document.querySelector('#popup')
+  if (popup) {
+    popup.remove()
+  }
 }
