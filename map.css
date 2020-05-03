@@ -20,6 +20,10 @@ svg {
   margin-right: 20px;
 }
 
+#map path:hover {
+  stroke-width: 0.2;
+}
+
 #bar-chart g {
   transition: opacity 500ms ease;
 }

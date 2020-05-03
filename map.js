@@ -3,10 +3,8 @@ import { createSVGElement, normalize, createTable, appendRowToTable } from './co
 
 // DOM
 const svg = document.querySelector('#map')
-const options = document.querySelector('#option')
-options.addEventListener('change', event => {
-  drawMap(getOptions(event.target.value))
-})
+const select = document.querySelector('#option')
+select.onchange = event => drawMap(getOptions(event.target.value))
 
 // Data
 const countyData = mapData.features
@@ -14,8 +12,7 @@ const countyData = mapData.features
 // Start
 drawMap({ })
 
-function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k', hoverStroke = 'red' }) {
-  console.log(stroke)
+function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k' }) {
   const minMaxData = determineMinMaxData(minMaxSource)
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
@@ -33,15 +30,7 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
         d: pathData
       })
       path.onclick = (event) => displayPopup(event, elem.attributes)
-      path.onmouseover = () => {
-        path.setAttribute('stroke', hoverStroke)
-        path.setAttribute('stroke-width', 0.2)
-      }
-      path.onmouseleave = () => {
-        clearPopup()
-        path.setAttribute('stroke', stroke)
-        path.setAttribute('stroke-width', 0.1)
-      }
+      path.onmouseleave = () => clearPopup()
 
       const title = createSVGElement('title')
       title.textContent = elem.attributes.county
@@ -116,17 +105,17 @@ function clearPopup () {
   }
 }
 
-function getOptions (choice) {
-  switch (choice) {
+function getOptions (option) {
+  switch (option) {
     case 'red':
-      return { stroke: 'black', hue: '1', minMaxSource: 'cases_per_100k', hoverStroke: 'green' }
-    case 'yellow':
-      return { stroke: 'green', hue: '61', minMaxSource: 'cases7_per_100k', hoverStroke: 'orange' }
+      return { stroke: 'black', hue: '1', minMaxSource: 'cases_per_100k' }
     case 'purple':
-      return { stroke: 'blue', hue: '283', minMaxSource: 'cases_per_100k', hoverStroke: 'yellow' }
+      return { stroke: 'blue', hue: '283', minMaxSource: 'cases_per_100k' }
+    case 'yellow':
+      return { stroke: 'green', hue: '61', minMaxSource: 'cases7_per_100k' }
     case 'green':
-      return { stroke: 'red', hue: '123', minMaxSource: 'cases7_per_100k', hoverStroke: 'blue' }
+      return { stroke: 'red', hue: '123', minMaxSource: 'cases7_per_100k' }
     default:
-      return { stroke: 'black', hue: '240', minMaxSource: 'cases_per_100k', hoverStroke: 'red' }
+      return { }
   }
 }
