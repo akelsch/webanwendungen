@@ -12,13 +12,11 @@ svg {
   border: 1px solid black;
 }
 
-.wrapper {
-  white-space: nowrap;
-  overflow: visible;
+.container {
+  display: flex;
 }
 
-.left {
-  float: left;
+.mr-1 {
   margin-right: 20px;
 }
 

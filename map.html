@@ -11,9 +11,19 @@
 <body>
   <h1>Corona-Verbreitung</h1>
 
-  <div class="wrapper">
-    <section class="left">
+  <div class="container">
+    <section class="mr-1">
       <h2>Karte</h2>
+      <form>
+        <label for="option">Wählen Sie ein Option aus.</label>
+        <select id="option" name="option">
+          <option value="standard">Standard</option>
+          <option value="red">Rot</option>
+          <option value="purple">Lila</option>
+          <option value="yellow">Gelb</option>
+          <option value="green">Grün</option>
+        </select>
+      </form>
       <svg id="map" width="1000px" viewBox="0 0 100 100" transform="scale(-1,1) rotate(180)">
       </svg>
     </section>
@@ -24,13 +34,6 @@
         <label for="state">Wählen Sie ein Bundesland aus.</label>
         <select id="state" name="state">
           <option value="alle">alle</option>
-        </select>
-        <select id="option" name="option">
-          <option value="standard">Standard</option>
-          <option value="red">Rot</option>
-          <option value="purple">Lila</option>
-          <option value="yellow">Gelb</option>
-          <option value="green">Grün</option>
         </select>
       </form>
       <svg id="bar-chart" width="1000px" viewBox="0 0 100 100">
