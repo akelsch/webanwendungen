@@ -95,12 +95,12 @@ function getOptions () {
   switch (selection) {
     case 'red':
       return { state: state, amount: 3, color: 'red' }
-    case 'purple':
-      return { state: state, amount: 2, color: 'purple' }
     case 'yellow':
-      return { state: state, amount: 6, color: 'yellow' }
+      return { state: state, amount: 4, color: 'yellow' }
     case 'green':
-      return { state: state, amount: 4, color: 'green' }
+      return { state: state, amount: 5, color: 'green' }
+    case 'blue':
+      return { state: state, amount: 6, color: 'blue' }
     default:
       return { state: state }
   }

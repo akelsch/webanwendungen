@@ -3,7 +3,7 @@ import { createSVGElement, normalize, createTable } from './common.js'
 
 // DOM
 const option = document.querySelector('#option')
-option.addEventListener('change', () => drawMap(getOptions()))
+option.addEventListener('change', () => drawMap(getOptions(event.target.value)))
 const popup = document.querySelector('#popup')
 const svg = document.querySelector('#map')
 
@@ -101,13 +101,13 @@ function displayPopup (event, attributes) {
 function getOptions (selection) {
   switch (selection) {
     case 'red':
-      return { stroke: 'black', hue: '1', minMaxSource: 'cases_per_100k' }
-    case 'purple':
-      return { stroke: 'blue', hue: '283', minMaxSource: 'cases_per_100k' }
+      return { stroke: 'blue', hue: '0', minMaxSource: 'cases_per_100k' }
     case 'yellow':
-      return { stroke: 'green', hue: '61', minMaxSource: 'cases7_per_100k' }
+      return { stroke: 'red', hue: '60', minMaxSource: 'cases7_per_100k' }
     case 'green':
-      return { stroke: 'red', hue: '123', minMaxSource: 'cases7_per_100k' }
+      return { stroke: 'brown', hue: '120', minMaxSource: 'cases_per_100k' }
+    case 'blue':
+      return { stroke: 'orange', hue: '240', minMaxSource: 'cases7_per_100k' }
     default:
       return { }
   }
