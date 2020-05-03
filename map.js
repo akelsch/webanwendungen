@@ -2,8 +2,8 @@ import { mapData } from './map-data.js'
 import { createSVGElement, normalize, createTable } from './common.js'
 
 // DOM
-const select = document.querySelector('#option')
-select.onchange = event => drawMap(getOptions(event.target.value))
+const option = document.querySelector('#option')
+option.addEventListener('change', () => drawMap(getOptions()))
 const popup = document.querySelector('#popup')
 const svg = document.querySelector('#map')
 
@@ -98,8 +98,8 @@ function displayPopup (event, attributes) {
   popup.appendChild(table)
 }
 
-function getOptions (option) {
-  switch (option) {
+function getOptions (selection) {
+  switch (selection) {
     case 'red':
       return { stroke: 'black', hue: '1', minMaxSource: 'cases_per_100k' }
     case 'purple':

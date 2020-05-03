@@ -1,30 +1,15 @@
 /* eslint-env browser */
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize } from './common.js'
-// DOM
-const select = document.getElementById('state')
-const svg = document.getElementById('bar-chart')
-const options = document.querySelector('#option')
-// User option data
-const optionData = {
-  state: 'alle',
-  color: 'lightblue',
-  amount: 5
-}
 
 // CSS
 const barChartTransitionInMs = 750
 
-// Eventlistner
-options.addEventListener('change', event => {
-  setOptions(event.target.value)
-  drawBarChart(optionData)
-})
-
-select.onchange = event => {
-  optionData.state = event.target.value
-  drawBarChart(optionData)
-}
+// DOM
+const option = document.querySelector('#option')
+option.addEventListener('change', () => drawBarChart(getOptions()))
+const select = document.getElementById('state')
+const svg = document.getElementById('bar-chart')
 
 // Data
 const sortedData = mapData.features.map(elem => elem.attributes)
@@ -33,6 +18,7 @@ const sortedData = mapData.features.map(elem => elem.attributes)
 // Start
 initSelect()
 drawBarChart({ state: select.value })
+select.onchange = () => drawBarChart(getOptions())
 
 function initSelect () {
   const states = new Set()
@@ -103,26 +89,19 @@ function createBarRect (y, county, color) {
   return rect
 }
 
-function setOptions (choice) {
-  switch (choice) {
+function getOptions () {
+  const selection = option.value
+  const state = select.value
+  switch (selection) {
     case 'red':
-      optionData.color = 'red'
-      optionData.amount = 3
-      break
-    case 'yellow':
-      optionData.color = 'yellow'
-      optionData.amount = 6
-      break
+      return { state: state, amount: 3, color: 'red' }
     case 'purple':
-      optionData.color = 'purple'
-      optionData.amount = 2
-      break
+      return { state: state, amount: 2, color: 'purple' }
+    case 'yellow':
+      return { state: state, amount: 6, color: 'yellow' }
     case 'green':
-      optionData.color = 'green'
-      optionData.amount = 4
-      break
+      return { state: state, amount: 4, color: 'green' }
     default:
-      optionData.color = 'lightblue'
-      optionData.amount = 5
+      return { state: state }
   }
 }
