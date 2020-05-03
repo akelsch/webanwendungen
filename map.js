@@ -1,5 +1,5 @@
 import { mapData } from './map-data.js'
-import { createSVGElement, normalize, createTable, appendRowToTable } from './common.js'
+import { createSVGElement, normalize, createTable } from './common.js'
 
 // DOM
 const select = document.querySelector('#option')
@@ -86,14 +86,15 @@ function displayPopup (event, attributes) {
   popup.style.left = `${event.clientX}px`
   popup.style.top = `${event.clientY}px`
 
-  const table = createTable()
-  appendRowToTable(table, 'Kreis', attributes.county)
-  appendRowToTable(table, 'Bundesland', attributes.BL)
-  appendRowToTable(table, 'Einwohnerzahl', attributes.EWZ)
-  appendRowToTable(table, 'Fälle', attributes.cases)
-  appendRowToTable(table, 'Fälle/100T Einwohner', attributes.cases_per_100k.toFixed(1))
-  appendRowToTable(table, 'In den letzten 7 Tagen', attributes.cases7_per_100k.toFixed(1))
-  appendRowToTable(table, 'Todesfälle', attributes.deaths)
+  const table = createTable({
+    Kreis: attributes.county,
+    Bundesland: attributes.BL,
+    Einwohnerzahl: attributes.EWZ,
+    Fälle: attributes.cases,
+    'Fälle/100T Einwohner': attributes.cases_per_100k.toFixed(1),
+    'In den letzten 7 Tagen': attributes.cases7_per_100k.toFixed(1),
+    Todesfälle: attributes.deaths
+  })
   popup.appendChild(table)
 }
 
