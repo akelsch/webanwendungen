@@ -3,7 +3,7 @@ import { createSVGElement, normalize, createTable } from './common.js'
 
 // DOM
 const option = document.querySelector('#option')
-option.addEventListener('change', () => drawMap(getOptions(event.target.value)))
+option.addEventListener('change', event => drawMap(getOptions(event.target.value)))
 const popup = document.querySelector('#popup')
 const svg = document.querySelector('#map')
 
