@@ -2,12 +2,14 @@
 import { mapData } from './map-data.js'
 import { createSVGElement, normalize } from './common.js'
 
-// DOM
-const select = document.getElementById('state')
-const svg = document.getElementById('bar-chart')
-
 // CSS
 const barChartTransitionInMs = 750
+
+// DOM
+const option = document.querySelector('#option')
+option.addEventListener('change', () => drawBarChart(getOptions()))
+const select = document.getElementById('state')
+const svg = document.getElementById('bar-chart')
 
 // Data
 const sortedData = mapData.features.map(elem => elem.attributes)
@@ -16,7 +18,7 @@ const sortedData = mapData.features.map(elem => elem.attributes)
 // Start
 initSelect()
 drawBarChart({ state: select.value })
-select.onchange = event => drawBarChart({ state: event.target.value })
+select.onchange = () => drawBarChart(getOptions())
 
 function initSelect () {
   const states = new Set()
@@ -24,7 +26,7 @@ function initSelect () {
   Array.from(states).sort().forEach(state => select.appendChild(new Option(state, state)))
 }
 
-function drawBarChart ({ state = 'alle', amount = 5 }) {
+function drawBarChart ({ state = 'alle', amount = 5, fill = 'lightblue' }) {
   svg.innerHTML = ''
   let casesY = 11
   let countyY = 7
@@ -41,7 +43,7 @@ function drawBarChart ({ state = 'alle', amount = 5 }) {
     group.appendChild(createCountyText(countyY, county))
     countyY += 7
 
-    const bar = createBarRect(barY, county)
+    const bar = createBarRect(barY, county, fill)
     bar.style.width = 0
     group.appendChild(bar)
     barY += 7
@@ -76,13 +78,30 @@ function createCountyText (y, county) {
   return text
 }
 
-function createBarRect (y, county) {
+function createBarRect (y, county, fill) {
   const rect = createSVGElement('rect', {
     x: 10,
     y: y,
     width: normalize(county.cases_per_100k, 0, sortedData[0].cases_per_100k) * 69,
     height: 3,
-    fill: 'lightblue'
+    fill: fill
   })
   return rect
+}
+
+function getOptions () {
+  const selection = option.value
+  const state = select.value
+  switch (selection) {
+    case 'red':
+      return { state: state, amount: 3, fill: 'red' }
+    case 'yellow':
+      return { state: state, amount: 4, fill: 'yellow' }
+    case 'green':
+      return { state: state, amount: 5, fill: 'green' }
+    case 'blue':
+      return { state: state, amount: 6, fill: 'blue' }
+    default:
+      return { state: state }
+  }
 }

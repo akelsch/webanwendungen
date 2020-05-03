@@ -1,7 +1,10 @@
 import { mapData } from './map-data.js'
-import { createSVGElement, normalize, createTable, appendRowToTable } from './common.js'
+import { createSVGElement, normalize, createTable } from './common.js'
 
 // DOM
+const option = document.querySelector('#option')
+option.addEventListener('change', event => drawMap(getOptions(event.target.value)))
+const popup = document.querySelector('#popup')
 const svg = document.querySelector('#map')
 
 // Data
@@ -11,6 +14,8 @@ const countyData = mapData.features
 drawMap({ })
 
 function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100k' }) {
+  svg.innerHTML = ''
+
   const minMaxData = determineMinMaxData(minMaxSource)
   countyData.forEach(elem => {
     elem.geometry.rings.forEach(ring => {
@@ -28,7 +33,7 @@ function drawMap ({ stroke = 'black', hue = '240', minMaxSource = 'cases_per_100
         d: pathData
       })
       path.onclick = (event) => displayPopup(event, elem.attributes)
-      path.onmouseleave = () => clearPopup()
+      path.onmouseleave = () => { popup.style.display = 'none' }
 
       const title = createSVGElement('title')
       title.textContent = elem.attributes.county
@@ -76,29 +81,34 @@ function determineMinMaxData (minMaxSource) {
 }
 
 function displayPopup (event, attributes) {
-  clearPopup()
+  popup.innerHTML = ''
+  popup.style.display = null
+  popup.style.left = `${event.clientX}px`
+  popup.style.top = `${event.clientY}px`
 
-  const popupDiv = document.createElement('div')
-  popupDiv.id = 'popup'
-  popupDiv.style.left = `${event.clientX}px`
-  popupDiv.style.top = `${event.clientY}px`
-
-  const dataTable = createTable()
-  appendRowToTable(dataTable, 'Kreis', attributes.county)
-  appendRowToTable(dataTable, 'Bundesland', attributes.BL)
-  appendRowToTable(dataTable, 'Einwohnerzahl', attributes.EWZ)
-  appendRowToTable(dataTable, 'Fälle', attributes.cases)
-  appendRowToTable(dataTable, 'Fälle/100T Einwohner', attributes.cases_per_100k.toFixed(1))
-  appendRowToTable(dataTable, 'In den letzten 7 Tagen', attributes.cases7_per_100k.toFixed(1))
-  appendRowToTable(dataTable, 'Todesfälle', attributes.deaths)
-  popupDiv.appendChild(dataTable)
-
-  svg.parentNode.insertBefore(popupDiv, svg)
+  const table = createTable({
+    Kreis: attributes.county,
+    Bundesland: attributes.BL,
+    Einwohnerzahl: attributes.EWZ,
+    Fälle: attributes.cases,
+    'Fälle/100T Einwohner': attributes.cases_per_100k.toFixed(1),
+    'In den letzten 7 Tagen': attributes.cases7_per_100k.toFixed(1),
+    Todesfälle: attributes.deaths
+  })
+  popup.appendChild(table)
 }
 
-function clearPopup () {
-  const popup = document.querySelector('#popup')
-  if (popup) {
-    popup.remove()
+function getOptions (selection) {
+  switch (selection) {
+    case 'red':
+      return { stroke: 'blue', hue: '0', minMaxSource: 'cases_per_100k' }
+    case 'yellow':
+      return { stroke: 'red', hue: '60', minMaxSource: 'cases7_per_100k' }
+    case 'green':
+      return { stroke: 'brown', hue: '120', minMaxSource: 'cases_per_100k' }
+    case 'blue':
+      return { stroke: 'orange', hue: '240', minMaxSource: 'cases7_per_100k' }
+    default:
+      return { }
   }
 }
