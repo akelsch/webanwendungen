@@ -1,5 +1,7 @@
 # corona-map
 
+https://moodle.htwsaar.de/mod/assign/view.php?id=34661
+
 ## Links
 
 * Karte: https://corona.rki.de/
