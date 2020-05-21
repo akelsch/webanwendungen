@@ -11,7 +11,7 @@
 <body>
   <h1>Kartenserver</h1>
 
-  <form action="/mapdata" method="get">
+  <form action="/mapdata" method="get" id="form">
     <div>
       <label for="state">Bundesland:</label>
       <select name="state" id="state">
@@ -50,6 +50,13 @@
 
     <button type="submit">Absenden</button>
   </form>
+
+  <h2>Server Antwort:</h2>
+  <pre>
+    <code id="response"></code>
+  </pre>
+
+  <script type="module" src="main.js"></script>
 </body>
 
 </html>

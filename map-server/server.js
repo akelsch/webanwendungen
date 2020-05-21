@@ -11,7 +11,7 @@ const port = 3000
 let rootDir
 
 if (process.argv.length === 2) {
-  rootDir = '.'
+  rootDir = 'public'
 } else if (process.argv.length === 3) {
   rootDir = process.argv[2]
 } else {
