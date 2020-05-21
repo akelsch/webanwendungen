@@ -1,12 +1,55 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kartenserver</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <h1>Hallo Welt</h1>
+  <h1>Kartenserver</h1>
+
+  <form action="/mapdata" method="get">
+    <div>
+      <label for="state">Bundesland:</label>
+      <select name="state" id="state">
+        <option value="1">Schleswig-Holstein</option>
+        <option value="2">Hamburg</option>
+        <option value="3">Niedersachsen</option>
+        <option value="4">Bremen</option>
+        <option value="5">Nordrhein-Westfalen</option>
+        <option value="6">Hessen</option>
+        <option value="7">Rheinland-Pfalz</option>
+        <option value="8">Baden-Württemberg</option>
+        <option value="9">Bayern</option>
+        <option value="10">Saarland</option>
+        <option value="11">Berlin</option>
+        <option value="12">Brandenburg</option>
+        <option value="13">Mecklenburg-Vorpommern</option>
+        <option value="14">Sachsen</option>
+        <option value="15">Sachsen-Anhalt</option>
+        <option value="16">Thüringen</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="resolution">Auflösung:</label>
+      <select name="resolution" id="resolution">
+        <option value="high">Hoch</option>
+        <option value="medium">Mittel</option>
+        <option value="low">Niedrig</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="zoom">Zoomlevel:</label>
+      <input type="number" name="zoom" id="zoom" value="0" min="0" max="20">
+    </div>
+
+    <button type="submit">Absenden</button>
+  </form>
 </body>
+
 </html>

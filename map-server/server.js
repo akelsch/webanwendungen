@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as http from 'http'
 import * as path from 'path'
 import * as querystring from 'querystring'
+// import { mapData } from './map-data.js'
 
 const hostname = '127.0.0.1'
 const port = 3000
@@ -32,17 +33,23 @@ function handleRequest (request, response) {
     return
   }
 
-  if (request.url.startsWith('/mapdata')) {
-    // TODO
-    console.log(querystring.parse(request.url.split('?')[1]))
+  const url = request.url === '/' ? '/index.html' : request.url
+  if (url.startsWith('/mapdata')) {
+    const queryParams = querystring.parse(url.split('?')[1])
+    serveGeodata(response, queryParams)
   } else {
-    const url = request.url === '/' ? 'index.html' : request.url
     const filePath = path.join(rootDir, url)
-    serveFile(filePath, response)
+    serveFile(response, filePath)
   }
 }
 
-function serveFile (filePath, response) {
+function serveGeodata (response, queryParams) {
+  // TODO
+  response.setHeader('Content-Type', 'application/json')
+  response.end(JSON.stringify(queryParams))
+}
+
+function serveFile (response, filePath) {
   fs.readFile(filePath, (err, data) => {
     if (err) {
       response.statusCode = err.code === 'ENOENT' ? 404 : 500
