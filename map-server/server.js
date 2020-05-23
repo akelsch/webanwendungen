@@ -5,6 +5,8 @@ import * as path from 'path'
 import * as querystring from 'querystring'
 import { mapData } from './map-data.js'
 
+const geodata = mapData.features
+
 const hostname = '127.0.0.1'
 const port = 3000
 
@@ -44,9 +46,14 @@ function handleRequest (request, response) {
 }
 
 function serveGeodata (response, queryParams) {
-  // TODO
+  // TODO resolution => Ramer–Douglas–Peucker
+  // TODO zoom => Web-Mercator
+  const { BL_ID: stateId, resolution, zoom } = queryParams
+  const filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
+    .map(elem => elem.geometry.rings)
+
   response.setHeader('Content-Type', 'application/json')
-  response.end(JSON.stringify(queryParams))
+  response.end(JSON.stringify(filteredData))
 }
 
 function serveFile (response, filePath) {
