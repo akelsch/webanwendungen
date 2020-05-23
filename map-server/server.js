@@ -4,6 +4,7 @@ import * as http from 'http'
 import * as path from 'path'
 import * as querystring from 'querystring'
 import { mapData } from './map-data.js'
+import { douglasPeucker } from './algorithms.js'
 
 const geodata = mapData.features
 
@@ -49,8 +50,10 @@ function serveGeodata (response, queryParams) {
   // TODO resolution => Ramer–Douglas–Peucker
   // TODO zoom => Web-Mercator
   const { BL_ID: stateId, resolution, zoom } = queryParams
-  const filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
+  let filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
     .map(elem => elem.geometry.rings)
+  filteredData = applyResolution(geodata, resolution)
+  filteredData = applyZoom(geodata, zoom)
 
   response.setHeader('Content-Type', 'application/json')
   response.end(JSON.stringify(filteredData))
@@ -85,4 +88,19 @@ function getContentType (filePath) {
       contentType = 'text/plain'
   }
   return contentType
+}
+
+function applyResolution (geodata, resolution) {
+  switch (resolution) {
+    case 'high':
+      return geodata
+    case 'medium':
+      return douglasPeucker(geodata, 1)
+    case 'low':
+      return douglasPeucker(geodata, 2)
+  }
+}
+
+function applyZoom (geodata, zoom) {
+  return geodata
 }
