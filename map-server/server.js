@@ -6,7 +6,8 @@ import * as querystring from 'querystring'
 import { mapData } from './map-data.js'
 import { douglasPeucker, webMercator } from './algorithms.js'
 
-const geodata = mapData.features
+const viewBoxWidth = 1000
+const viewBoxHeight = 1000
 
 const hostname = '127.0.0.1'
 const port = 3000
@@ -48,14 +49,14 @@ function handleRequest (request, response) {
 
 function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
-  const filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
+  const filteredData = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
     .flatMap(elem => elem.geometry.rings)
 
   const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(filteredData)
   const normalizedData = filteredData.map(ring => ring.map(([x, y]) => {
-    const xNorm = normalize(x, minX, maxX) * 100
-    const yNorm = normalize(y, minY, maxY) * 100
-    return [xNorm, yNorm]
+    const xNorm = normalize(x, minX, maxX) * viewBoxWidth
+    const yNorm = normalize(y, minY, maxY) * viewBoxHeight
+    return [xNorm.toFixed(), yNorm.toFixed()]
   }))
 
   // filteredData = applyResolution(geodata, resolution)

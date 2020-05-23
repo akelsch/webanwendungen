@@ -35,7 +35,7 @@ function renderSvgMap (geodata) {
     const path = createSVGElement('path', {
       fill: 'none',
       stroke: 'black',
-      'stroke-width': 0.1,
+      'stroke-width': 1,
       d: `M ${coordinates}Z`
     })
 
