@@ -1,4 +1,4 @@
-export { douglasPeucker }
+export { douglasPeucker, webMercator }
 
 function douglasPeucker (pointList, epsilon) {
   // Find the point with the maximum distance
@@ -45,4 +45,37 @@ function distance (point, pointList) {
   })
 
   return max
+}
+
+function convertLatitude (latitudeRad, zoom) {
+  return (
+    Math.floor(
+      (256 / (2 + Math.PI)) * Math.pow(2, zoom) * (Math.PI - Math.log(Math.abs(Math.tan((Math.PI / 4) + (latitudeRad / 2)))))
+    )
+  )
+}
+
+function convertLongitude (longitudeRad, zoom) {
+  return (
+    Math.floor(
+      (256 / (2 * Math.PI)) * Math.pow(2, zoom) * (longitudeRad + Math.PI)
+    )
+  )
+}
+
+function webMercator (geodata, zoom) {
+  geodata.forEach(element => {
+    element[0] = radiansToDegrees(convertLatitude(degreesToRadians(element[0]), zoom))
+    element[1] = radiansToDegrees(convertLongitude(degreesToRadians(element[1]), zoom))
+  })
+
+  return geodata
+}
+
+function degreesToRadians (degrees) {
+  return degrees * (Math.PI / 180)
+}
+
+function radiansToDegrees (radians) {
+  return radians * 180 / Math.PI
 }

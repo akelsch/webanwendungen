@@ -4,7 +4,7 @@ import * as http from 'http'
 import * as path from 'path'
 import * as querystring from 'querystring'
 import { mapData } from './map-data.js'
-import { douglasPeucker } from './algorithms.js'
+import { douglasPeucker, webMercator } from './algorithms.js'
 
 const geodata = mapData.features
 
@@ -102,5 +102,5 @@ function applyResolution (geodata, resolution) {
 }
 
 function applyZoom (geodata, zoom) {
-  return geodata
+  return webMercator(geodata, zoom)
 }
