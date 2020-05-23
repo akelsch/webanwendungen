@@ -30,50 +30,43 @@ function getFormURL () {
 }
 
 function renderSvgMap (geodata) {
-  console.log(geodata)
   svg.innerHTML = ''
-  console.time('determineMinMaxData')
-  const minMaxData = determineMinMaxData(geodata)
-  console.timeEnd('determineMinMaxData')
+  const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(geodata)
   geodata.forEach(ring => {
-    let pathData = 'M '
-    ring.forEach(([x, y]) => {
-      pathData += `${normalize(x, minMaxData.minX, minMaxData.maxX) * 100},${normalize(y, minMaxData.minY, minMaxData.maxY) * 100} `
-    })
-    pathData += 'Z'
+    const normalizedCoordinates = ring.reduce((acc, [x, y]) => {
+      const xNorm = normalize(x, minX, maxX) * 100
+      const yNorm = normalize(y, minY, maxY) * 100
+      return acc + `${xNorm},${yNorm} `
+    }, '')
 
     const path = createSVGElement('path', {
       fill: 'none',
       stroke: 'black',
       'stroke-width': 0.1,
-      d: pathData
+      d: `M ${normalizedCoordinates}Z`
     })
 
     svg.appendChild(path)
   })
 }
 
-function determineMinMaxData (geodata) {
-  let minX = Infinity
-  let minY = Infinity
-  let maxX = 0
-  let maxY = 0
-  geodata.forEach(ring => {
+function determineMinMaxCoordinates (geodata) {
+  return geodata.reduce((acc, ring) => {
+    // Effizienter als das Array erst zu flatten
     ring.forEach(([x, y]) => {
-      if (minX > x) {
-        minX = x
-      } else if (maxX < x) {
-        maxX = x
+      if (x < acc.minX) {
+        acc.minX = x
       }
-
-      if (minY > y) {
-        minY = y
-      } else if (maxY < y) {
-        maxY = y
+      if (x > acc.maxX) {
+        acc.maxX = x
+      }
+      if (y < acc.minY) {
+        acc.minY = y
+      }
+      if (y > acc.maxY) {
+        acc.maxY = y
       }
     })
-  })
-  return {
-    minX, maxX, minY, maxY
-  }
+    return acc
+  }, { minX: Infinity, maxX: 0, minY: Infinity, maxY: 0 })
 }
