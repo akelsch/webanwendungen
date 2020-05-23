@@ -1,6 +1,4 @@
-export { douglasPeucker, webMercator }
-
-function douglasPeucker (pointList, epsilon) {
+export function douglasPeucker (pointList, epsilon) {
   // Find the point with the maximum distance
   let dmax = 0
   let index = 0
@@ -29,6 +27,15 @@ function douglasPeucker (pointList, epsilon) {
   }
   // Return the result
   return resultList
+}
+
+export function webMercator (geodata, zoom) {
+  geodata.forEach(element => {
+    element[0] = radiansToDegrees(convertLatitude(degreesToRadians(element[0]), zoom))
+    element[1] = radiansToDegrees(convertLongitude(degreesToRadians(element[1]), zoom))
+  })
+
+  return geodata
 }
 
 function distance (point, pointList) {
@@ -61,15 +68,6 @@ function convertLongitude (longitudeRad, zoom) {
       (256 / (2 * Math.PI)) * Math.pow(2, zoom) * (longitudeRad + Math.PI)
     )
   )
-}
-
-function webMercator (geodata, zoom) {
-  geodata.forEach(element => {
-    element[0] = radiansToDegrees(convertLatitude(degreesToRadians(element[0]), zoom))
-    element[1] = radiansToDegrees(convertLongitude(degreesToRadians(element[1]), zoom))
-  })
-
-  return geodata
 }
 
 function degreesToRadians (degrees) {

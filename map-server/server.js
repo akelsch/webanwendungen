@@ -47,8 +47,6 @@ function handleRequest (request, response) {
 }
 
 function serveGeodata (response, queryParams) {
-  // TODO resolution => Ramer–Douglas–Peucker
-  // TODO zoom => Web-Mercator
   const { BL_ID: stateId, resolution, zoom } = queryParams
   let filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
     .map(elem => elem.geometry.rings)
@@ -57,6 +55,21 @@ function serveGeodata (response, queryParams) {
 
   response.setHeader('Content-Type', 'application/json')
   response.end(JSON.stringify(filteredData))
+}
+
+function applyResolution (geodata, resolution) {
+  switch (resolution) {
+    case 'high':
+      return geodata
+    case 'medium':
+      return douglasPeucker(geodata, 1)
+    case 'low':
+      return douglasPeucker(geodata, 2)
+  }
+}
+
+function applyZoom (geodata, zoom) {
+  return webMercator(geodata, zoom)
 }
 
 function serveFile (response, filePath) {
@@ -88,19 +101,4 @@ function getContentType (filePath) {
       contentType = 'text/plain'
   }
   return contentType
-}
-
-function applyResolution (geodata, resolution) {
-  switch (resolution) {
-    case 'high':
-      return geodata
-    case 'medium':
-      return douglasPeucker(geodata, 1)
-    case 'low':
-      return douglasPeucker(geodata, 2)
-  }
-}
-
-function applyZoom (geodata, zoom) {
-  return webMercator(geodata, zoom)
 }
