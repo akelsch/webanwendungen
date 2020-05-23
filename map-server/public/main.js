@@ -1,17 +1,27 @@
 /* eslint-env browser */
 const form = document.getElementById('form')
-const response = document.getElementById('response')
+const formUrl = document.getElementById('form-url')
+
+form.onchange = event => {
+  const url = getFormURL()
+  formUrl.href = url
+  formUrl.textContent = url
+}
 
 form.onsubmit = event => {
   event.preventDefault()
 
-  const url = new URL(event.target.action)
-  const queryParams = new URLSearchParams(new FormData(event.target))
-  url.search = queryParams
-
+  const url = getFormURL()
   fetch(url)
     .then(response => response.json())
-    .then(data => {
-      response.textContent = '\n' + JSON.stringify(data, null, 2)
-    })
+    .then(data => console.log(data))
 }
+
+function getFormURL () {
+  const url = new URL(form.action)
+  const queryParams = new URLSearchParams(new FormData(form))
+  url.search = queryParams
+  return url
+}
+
+form.dispatchEvent(new Event('change'))
