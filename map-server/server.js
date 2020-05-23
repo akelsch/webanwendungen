@@ -51,6 +51,7 @@ function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
   const filteredData = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
     .flatMap(elem => elem.geometry.rings)
+    .map(ring => ring.map(([long, lat]) => webMercator(long, lat, zoom)))
 
   const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(filteredData)
   const normalizedData = filteredData.map(ring => ring.map(([x, y]) => {
@@ -60,7 +61,6 @@ function serveGeodata (response, queryParams) {
   }))
 
   // filteredData = applyResolution(geodata, resolution)
-  // filteredData = applyZoom(geodata, zoom)
 
   response.setHeader('Content-Type', 'application/json')
   response.end(JSON.stringify(normalizedData))
@@ -100,10 +100,6 @@ function applyResolution (geodata, resolution) {
     case 'low':
       return douglasPeucker(geodata, 2)
   }
-}
-
-function applyZoom (geodata, zoom) {
-  return webMercator(geodata, zoom)
 }
 
 function serveFile (response, filePath) {

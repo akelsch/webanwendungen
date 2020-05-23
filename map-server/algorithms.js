@@ -29,15 +29,6 @@ export function douglasPeucker (pointList, epsilon) {
   return resultList
 }
 
-export function webMercator (geodata, zoom) {
-  geodata.forEach(element => {
-    element[0] = radiansToDegrees(convertLatitude(degreesToRadians(element[0]), zoom))
-    element[1] = radiansToDegrees(convertLongitude(degreesToRadians(element[1]), zoom))
-  })
-
-  return geodata
-}
-
 function distance (point, pointList) {
   let max = 0
 
@@ -54,26 +45,12 @@ function distance (point, pointList) {
   return max
 }
 
-function convertLatitude (latitudeRad, zoom) {
-  return (
-    Math.floor(
-      (256 / (2 + Math.PI)) * Math.pow(2, zoom) * (Math.PI - Math.log(Math.abs(Math.tan((Math.PI / 4) + (latitudeRad / 2)))))
-    )
-  )
+export function webMercator (long, lat, zoom) {
+  const x = (256 / (2 * Math.PI)) * (2 ** zoom) * (radians(long) + Math.PI)
+  const y = (256 / (2 * Math.PI)) * (2 ** zoom) * (Math.PI - Math.log(Math.tan(Math.PI / 4 + radians(lat) / 2)))
+  return [x, y]
 }
 
-function convertLongitude (longitudeRad, zoom) {
-  return (
-    Math.floor(
-      (256 / (2 * Math.PI)) * Math.pow(2, zoom) * (longitudeRad + Math.PI)
-    )
-  )
-}
-
-function degreesToRadians (degrees) {
+function radians (degrees) {
   return degrees * (Math.PI / 180)
-}
-
-function radiansToDegrees (radians) {
-  return radians * 180 / Math.PI
 }
