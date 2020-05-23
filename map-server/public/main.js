@@ -1,6 +1,4 @@
 /* eslint-env browser */
-import { createSVGElement, normalize } from './common.js'
-
 const form = document.getElementById('form')
 const formUrl = document.getElementById('form-url')
 const svg = document.getElementById('map')
@@ -31,42 +29,24 @@ function getFormURL () {
 
 function renderSvgMap (geodata) {
   svg.innerHTML = ''
-  const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(geodata)
   geodata.forEach(ring => {
-    const normalizedCoordinates = ring.reduce((acc, [x, y]) => {
-      const xNorm = normalize(x, minX, maxX) * 100
-      const yNorm = normalize(y, minY, maxY) * 100
-      return acc + `${xNorm},${yNorm} `
-    }, '')
+    const coordinates = ring.reduce((acc, [x, y]) => acc + `${x},${y} `, '')
 
     const path = createSVGElement('path', {
       fill: 'none',
       stroke: 'black',
       'stroke-width': 0.1,
-      d: `M ${normalizedCoordinates}Z`
+      d: `M ${coordinates}Z`
     })
 
     svg.appendChild(path)
   })
 }
 
-function determineMinMaxCoordinates (geodata) {
-  return geodata.reduce((acc, ring) => {
-    // Effizienter als das Array erst zu flatten
-    ring.forEach(([x, y]) => {
-      if (x < acc.minX) {
-        acc.minX = x
-      }
-      if (x > acc.maxX) {
-        acc.maxX = x
-      }
-      if (y < acc.minY) {
-        acc.minY = y
-      }
-      if (y > acc.maxY) {
-        acc.maxY = y
-      }
-    })
-    return acc
-  }, { minX: Infinity, maxX: 0, minY: Infinity, maxY: 0 })
+function createSVGElement (name, attributes) {
+  const element = document.createElementNS('http://www.w3.org/2000/svg', name)
+  for (const attName in attributes) {
+    element.setAttribute(attName, String(attributes[attName]))
+  }
+  return element
 }

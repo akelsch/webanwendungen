@@ -50,11 +50,44 @@ function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
   const filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
     .flatMap(elem => elem.geometry.rings)
+
+  const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(filteredData)
+  const normalizedData = filteredData.map(ring => ring.map(([x, y]) => {
+    const xNorm = normalize(x, minX, maxX) * 100
+    const yNorm = normalize(y, minY, maxY) * 100
+    return [xNorm, yNorm]
+  }))
+
   // filteredData = applyResolution(geodata, resolution)
   // filteredData = applyZoom(geodata, zoom)
 
   response.setHeader('Content-Type', 'application/json')
-  response.end(JSON.stringify(filteredData))
+  response.end(JSON.stringify(normalizedData))
+}
+
+function determineMinMaxCoordinates (geodata) {
+  return geodata.reduce((acc, ring) => {
+    // Effizienter als das Array erst zu flatten
+    ring.forEach(([x, y]) => {
+      if (x < acc.minX) {
+        acc.minX = x
+      }
+      if (x > acc.maxX) {
+        acc.maxX = x
+      }
+      if (y < acc.minY) {
+        acc.minY = y
+      }
+      if (y > acc.maxY) {
+        acc.maxY = y
+      }
+    })
+    return acc
+  }, { minX: Infinity, maxX: 0, minY: Infinity, maxY: 0 })
+}
+
+function normalize (x, min, max) {
+  return (x - min) / (max - min)
 }
 
 function applyResolution (geodata, resolution) {
