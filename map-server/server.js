@@ -48,10 +48,10 @@ function handleRequest (request, response) {
 
 function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
-  let filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
+  const filteredData = geodata.filter(elem => elem.attributes.BL_ID === stateId)
     .map(elem => elem.geometry.rings)
-  filteredData = applyResolution(geodata, resolution)
-  filteredData = applyZoom(geodata, zoom)
+  // filteredData = applyResolution(geodata, resolution)
+  // filteredData = applyZoom(geodata, zoom)
 
   response.setHeader('Content-Type', 'application/json')
   response.end(JSON.stringify(filteredData))
