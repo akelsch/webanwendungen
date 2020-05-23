@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as http from 'http'
 import * as path from 'path'
 import * as querystring from 'querystring'
-// import { mapData } from './map-data.js'
+import { mapData } from './map-data.js'
 
 const hostname = '127.0.0.1'
 const port = 3000
