@@ -1,32 +1,25 @@
-export function douglasPeucker (pointList, epsilon) {
-  // Find the point with the maximum distance
+export function douglasPeucker (points, epsilon) {
+  const end = points.length - 1
+
+  // Finde den Punkt mit dem größten Abstand
   let dmax = 0
   let index = 0
-  const end = pointList.length - 1
-
   for (let i = 1; i < end; i++) {
-    const d = perpendicularDistance(pointList[i], pointList[0], pointList[end])
+    const d = perpendicularDistance(points[i], points[0], points[end])
     if (d > dmax) {
-      index = i
       dmax = d
+      index = i
     }
   }
 
-  let resultList = []
-
-  // If max distance is greater than epsilon, recursively simplify
+  // Wenn die maximale Entfernung größer als Epsilon ist, dann rekursiv vereinfachen
   if (dmax > epsilon) {
-    // Recursive call
-    const recResults1 = douglasPeucker(pointList.slice(0, index), epsilon)
-    const recResults2 = douglasPeucker(pointList.slice(index, end), epsilon)
-
-    // Build the result list
-    resultList = recResults1.concat(recResults2)
+    const r1 = douglasPeucker(points.slice(0, index + 1), epsilon)
+    const r2 = douglasPeucker(points.slice(index), epsilon)
+    return r1.slice(0, r1.length - 1).concat(r2)
   } else {
-    resultList = [pointList[0], pointList[end]]
+    return [points[0], points[end]]
   }
-  // Return the result
-  return resultList
 }
 
 function perpendicularDistance (point, lineStart, lineEnd) {
