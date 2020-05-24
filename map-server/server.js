@@ -62,9 +62,9 @@ function applyResolution (ring, resolution) {
     default:
       return ring
     case 'medium':
-      return douglasPeucker(ring, 1)
+      return douglasPeucker(ring, 1 / 3)
     case 'low':
-      return douglasPeucker(ring, 2)
+      return douglasPeucker(ring, 3 / 4)
   }
 }
 
