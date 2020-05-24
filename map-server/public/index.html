@@ -15,21 +15,21 @@
     <div>
       <label for="stateId">Bundesland:</label>
       <select name="BL_ID" id="stateId">
-        <option value="1">Schleswig-Holstein</option>
-        <option value="2">Hamburg</option>
-        <option value="3">Niedersachsen</option>
-        <option value="4">Bremen</option>
-        <option value="5">Nordrhein-Westfalen</option>
-        <option value="6">Hessen</option>
-        <option value="7">Rheinland-Pfalz</option>
         <option value="8">Baden-Württemberg</option>
         <option value="9">Bayern</option>
-        <option value="10">Saarland</option>
         <option value="11">Berlin</option>
         <option value="12">Brandenburg</option>
+        <option value="4">Bremen</option>
+        <option value="2">Hamburg</option>
+        <option value="6">Hessen</option>
         <option value="13">Mecklenburg-Vorpommern</option>
-        <option value="14">Sachsen</option>
+        <option value="3">Niedersachsen</option>
+        <option value="5">Nordrhein-Westfalen</option>
+        <option value="7">Rheinland-Pfalz</option>
+        <option value="10" selected>Saarland</option>
         <option value="15">Sachsen-Anhalt</option>
+        <option value="14">Sachsen</option>
+        <option value="1">Schleswig-Holstein</option>
         <option value="16">Thüringen</option>
       </select>
     </div>
@@ -45,7 +45,7 @@
 
     <div>
       <label for="zoom">Zoomlevel:</label>
-      <input type="number" name="zoom" id="zoom" value="0" min="0" max="20">
+      <input type="number" name="zoom" id="zoom" value="3" min="0" max="20">
     </div>
 
     <button type="submit">Absenden</button>
@@ -55,7 +55,7 @@
     <p>Generierte URL: <a href="#" target="_blank" rel="noopener noreferrer" id="form-url"></a></p>
   </div>
 
-  <svg id="map" width="800px" viewBox="0 0 1000 1000"></svg>
+  <svg id="map" width="1000" height="800" viewBox="0 0 100 100"></svg>
 
   <script type="module" src="main.js"></script>
 </body>

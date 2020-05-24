@@ -29,18 +29,45 @@ function getFormURL () {
 
 function renderSvgMap (geodata) {
   svg.innerHTML = ''
+  const { minX, maxX, minY, maxY } = findMinMaxCoordinates(geodata)
+
+  const aspectRatio = (maxX - minX) / (maxY - minY)
+  svg.setAttribute('width', svg.getAttribute('height') * aspectRatio)
+  svg.setAttribute('viewBox', `${minX} ${minY} ${100 * aspectRatio} 100`)
+
   geodata.forEach(ring => {
     const coordinates = ring.reduce((acc, [x, y]) => acc + `${x},${y} `, '')
 
     const path = createSVGElement('path', {
       fill: 'none',
       stroke: 'black',
-      'stroke-width': 1,
+      'stroke-width': 0.1,
       d: `M ${coordinates}Z`
     })
 
     svg.appendChild(path)
   })
+}
+
+function findMinMaxCoordinates (geodata) {
+  return geodata.reduce((acc, ring) => {
+    // Effizienter als das Array erst zu flatten
+    ring.forEach(([x, y]) => {
+      if (x < acc.minX) {
+        acc.minX = x
+      }
+      if (x > acc.maxX) {
+        acc.maxX = x
+      }
+      if (y < acc.minY) {
+        acc.minY = y
+      }
+      if (y > acc.maxY) {
+        acc.maxY = y
+      }
+    })
+    return acc
+  }, { minX: Infinity, maxX: 0, minY: Infinity, maxY: 0 })
 }
 
 function createSVGElement (name, attributes) {

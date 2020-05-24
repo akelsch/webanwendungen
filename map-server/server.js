@@ -6,9 +6,6 @@ import * as querystring from 'querystring'
 import { mapData } from './map-data.js'
 import { douglasPeucker, webMercator } from './algorithms.js'
 
-const viewBoxWidth = 1000
-const viewBoxHeight = 1000
-
 const hostname = '127.0.0.1'
 const port = 3000
 
@@ -49,46 +46,14 @@ function handleRequest (request, response) {
 
 function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
-  const filteredData = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
+
+  const geodata = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
     .flatMap(elem => elem.geometry.rings)
     .map(ring => ring.map(([long, lat]) => webMercator(long, lat, zoom)))
-
-  const { minX, maxX, minY, maxY } = determineMinMaxCoordinates(filteredData)
-  const normalizedData = filteredData.map(ring => ring.map(([x, y]) => {
-    const xNorm = normalize(x, minX, maxX) * viewBoxWidth
-    const yNorm = normalize(y, minY, maxY) * viewBoxHeight
-    return [xNorm.toFixed(), yNorm.toFixed()]
-  }))
-
   // filteredData = applyResolution(geodata, resolution)
 
   response.setHeader('Content-Type', 'application/json')
-  response.end(JSON.stringify(normalizedData))
-}
-
-function determineMinMaxCoordinates (geodata) {
-  return geodata.reduce((acc, ring) => {
-    // Effizienter als das Array erst zu flatten
-    ring.forEach(([x, y]) => {
-      if (x < acc.minX) {
-        acc.minX = x
-      }
-      if (x > acc.maxX) {
-        acc.maxX = x
-      }
-      if (y < acc.minY) {
-        acc.minY = y
-      }
-      if (y > acc.maxY) {
-        acc.maxY = y
-      }
-    })
-    return acc
-  }, { minX: Infinity, maxX: 0, minY: Infinity, maxY: 0 })
-}
-
-function normalize (x, min, max) {
-  return (x - min) / (max - min)
+  response.end(JSON.stringify(geodata))
 }
 
 function applyResolution (geodata, resolution) {
