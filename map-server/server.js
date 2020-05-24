@@ -47,7 +47,7 @@ function handleRequest (request, response) {
 function serveGeodata (response, queryParams) {
   const { BL_ID: stateId, resolution, zoom } = queryParams
 
-  const geodata = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
+  const geodata = mapData.features.filter(elem => elem.attributes.BL_ID === stateId || stateId === '0')
     .flatMap(elem => elem.geometry.rings)
     .map(ring => ring.map(([long, lat]) => webMercator(long, lat, zoom)))
     .map(ring => applyResolution(ring, resolution))
