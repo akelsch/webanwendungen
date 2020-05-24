@@ -50,20 +50,21 @@ function serveGeodata (response, queryParams) {
   const geodata = mapData.features.filter(elem => elem.attributes.BL_ID === stateId)
     .flatMap(elem => elem.geometry.rings)
     .map(ring => ring.map(([long, lat]) => webMercator(long, lat, zoom)))
-  // filteredData = applyResolution(geodata, resolution)
+    .map(ring => applyResolution(ring, resolution))
 
   response.setHeader('Content-Type', 'application/json')
   response.end(JSON.stringify(geodata))
 }
 
-function applyResolution (geodata, resolution) {
+function applyResolution (ring, resolution) {
   switch (resolution) {
     case 'high':
-      return geodata
+    default:
+      return ring
     case 'medium':
-      return douglasPeucker(geodata, 1)
+      return douglasPeucker(ring, 1)
     case 'low':
-      return douglasPeucker(geodata, 2)
+      return douglasPeucker(ring, 2)
   }
 }
 

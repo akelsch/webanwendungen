@@ -2,10 +2,10 @@ export function douglasPeucker (pointList, epsilon) {
   // Find the point with the maximum distance
   let dmax = 0
   let index = 0
-  const end = pointList.length
+  const end = pointList.length - 1
 
   for (let i = 1; i < end; i++) {
-    const d = distance(pointList[i], pointList)
+    const d = perpendicularDistance(pointList[i], pointList[0], pointList[end])
     if (d > dmax) {
       index = i
       dmax = d
@@ -18,31 +18,38 @@ export function douglasPeucker (pointList, epsilon) {
   if (dmax > epsilon) {
     // Recursive call
     const recResults1 = douglasPeucker(pointList.slice(0, index), epsilon)
-    const recResults2 = douglasPeucker(pointList.slice(index, end - 1), epsilon)
+    const recResults2 = douglasPeucker(pointList.slice(index, end), epsilon)
 
     // Build the result list
     resultList = recResults1.concat(recResults2)
   } else {
-    resultList = [pointList[0], pointList[end - 1]]
+    resultList = [pointList[0], pointList[end]]
   }
   // Return the result
   return resultList
 }
 
-function distance (point, pointList) {
-  let max = 0
+function perpendicularDistance (point, lineStart, lineEnd) {
+  let dx = lineEnd[0] - lineStart[0]
+  let dy = lineEnd[1] - lineStart[1]
 
-  pointList.forEach(element => {
-    const x = element[0] - point[0]
-    const y = element[1] - point[1]
+  // Normalize
+  const mag = Math.hypot(dx, dy)
+  if (mag > 0.0) {
+    dx /= mag
+    dy /= mag
+  }
+  const pvx = point[0] - lineStart[0]
+  const pvy = point[1] - lineStart[1]
 
-    const distance = Math.sqrt(x * x + y * y)
-    if (max < distance) {
-      max = distance
-    }
-  })
+  // Get dot product (project pv onto normalized direction)
+  const pvdot = dx * pvx + dy * pvy
 
-  return max
+  // Scale line direction vector and subtract it from pv
+  const ax = pvx - pvdot * dx
+  const ay = pvy - pvdot * dy
+
+  return Math.hypot(ax, ay)
 }
 
 export function webMercator (long, lat, zoom) {
