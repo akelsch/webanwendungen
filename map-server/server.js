@@ -75,26 +75,23 @@ function serveFile (response, filePath) {
       response.setHeader('Content-Type', 'text/plain')
       response.end(`${http.STATUS_CODES[response.statusCode]} => ${err.message}`)
     } else {
-      response.setHeader('Content-Type', getContentType(filePath))
+      response.setHeader('Content-Type', getContentType(path.extname(filePath)))
       response.end(data)
     }
   })
 }
 
-function getContentType (filePath) {
-  let contentType
-  switch (path.extname(filePath)) {
+function getContentType (extension) {
+  switch (extension) {
     case '.html':
-      contentType = 'text/html'
-      break
+    case '.htm':
+      return 'text/html'
     case '.css':
-      contentType = 'text/css'
-      break
+      return 'text/css'
     case '.js':
-      contentType = 'text/javascript'
-      break
+    case '.mjs':
+      return 'text/javascript'
     default:
-      contentType = 'text/plain'
+      return 'text/plain'
   }
-  return contentType
 }
