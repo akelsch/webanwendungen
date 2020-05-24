@@ -29,11 +29,11 @@ function getFormURL () {
 
 function renderSvgMap (geodata) {
   svg.innerHTML = ''
-  const { minX, maxX, minY, maxY } = findMinMaxCoordinates(geodata)
 
-  const aspectRatio = (maxX - minX) / (maxY - minY)
-  svg.setAttribute('width', svg.getAttribute('height') * aspectRatio)
-  svg.setAttribute('viewBox', `${minX} ${minY} ${100 * aspectRatio} 100`)
+  const { minX, minY } = findMinMaxCoordinates(geodata)
+  const viewBox = svg.viewBox.baseVal
+  viewBox.x = minX
+  viewBox.y = minY
 
   geodata.forEach(ring => {
     const coordinates = ring.reduce((acc, [x, y]) => acc + `${x},${y} `, '')
