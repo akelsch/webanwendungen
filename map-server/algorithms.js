@@ -22,27 +22,19 @@ export function douglasPeucker (points, epsilon) {
   }
 }
 
-function perpendicularDistance (point, lineStart, lineEnd) {
-  let dx = lineEnd[0] - lineStart[0]
-  let dy = lineEnd[1] - lineStart[1]
+function perpendicularDistance ([x, y], [x1, y1], [x2, y2]) {
+  const dx = x2 - x1
+  const dy = y2 - y1
 
-  // Normalize
-  const mag = Math.hypot(dx, dy)
-  if (mag > 0.0) {
-    dx /= mag
-    dy /= mag
+  // Sonderfall: Die Strecke ist ein Punkt (p1 == p2)
+  if (dx === 0 && dy === 0) {
+    return Math.hypot(x - x1, y - y1)
   }
-  const pvx = point[0] - lineStart[0]
-  const pvy = point[1] - lineStart[1]
 
-  // Get dot product (project pv onto normalized direction)
-  const pvdot = dx * pvx + dy * pvy
+  const numerator = Math.abs(dy * x - dx * y + x2 * y1 - y2 * x1)
+  const denominator = Math.hypot(dy, dx)
 
-  // Scale line direction vector and subtract it from pv
-  const ax = pvx - pvdot * dx
-  const ay = pvy - pvdot * dy
-
-  return Math.hypot(ax, ay)
+  return numerator / denominator
 }
 
 export function webMercator (long, lat, zoom) {
