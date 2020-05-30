@@ -1,4 +1,5 @@
 const axios = require('axios')
+axios.defaults.baseURL = 'http://localhost:3000/api/v1/'
 
 const requests = [
   {
@@ -8,7 +9,7 @@ const requests = [
   {
     method: 'post',
     url: 'contacts',
-    newContact: {
+    data: {
       id: '100',
       firstName: 'Alan',
       lastName: 'Turing'
@@ -17,7 +18,7 @@ const requests = [
   {
     method: 'post',
     url: 'contacts',
-    newContact: {
+    data: {
       id: '101',
       firstName: 'Dermot',
       lastName: 'Turing'
@@ -44,3 +45,16 @@ const requests = [
     url: 'contacts'
   }
 ]
+
+async function makeRequestsSequentially () {
+  for (const request of requests) {
+    try {
+      const response = await axios(request)
+      console.log(JSON.stringify(response.data))
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+}
+
+makeRequestsSequentially()

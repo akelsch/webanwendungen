@@ -3,7 +3,18 @@ const ContactModel = require('../model/ContactModel')
 module.exports = class ContactRoute {
   static getContacts (request, response) {
     const contactsArray = ContactModel.getContacts()
-    response.send(contactsArray)
+
+    const queryParams = request.query
+    const filteredArray = contactsArray.filter(contact => {
+      for (const attr in queryParams) {
+        if (contact[attr] === undefined || !contact[attr].includes(queryParams[attr].contains)) {
+          return false
+        }
+      }
+      return true
+    })
+
+    response.send(filteredArray)
   }
 
   static findContact (request, response) {
