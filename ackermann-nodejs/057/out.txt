@@ -1,0 +1,8 @@
+[{"firstName":"Max","lastName":"Mustermann","id":"1"},{"firstName":"Moritz","lastName":"Mustermann","id":"2"}]
+{"firstName":"Alan","lastName":"Turing"}
+{"firstName":"Dermot","lastName":"Turing"}
+{"firstName":"Alan","lastName":"Turing"}
+[{"firstName":"Moritz","lastName":"Mustermann","id":"2"},{"firstName":"Dermot","lastName":"Turing","id":"101"}]
+[{"firstName":"Dermot","lastName":"Turing","id":"101"}]
+"deleted"
+[{"firstName":"Moritz","lastName":"Mustermann","id":"2"},{"firstName":"Alan","lastName":"Turing","id":"100"},{"firstName":"Dermot","lastName":"Turing","id":"101"}]
